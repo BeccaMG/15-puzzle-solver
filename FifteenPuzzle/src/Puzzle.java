@@ -2,13 +2,15 @@ import java.awt.Point;
 import java.util.Random;
 
 public class Puzzle {
-	Integer[][] puzzle = new Integer[4][4];
+	Integer[][] puzzle_grid = new Integer[4][4];
+    int [] puzzle_array = new int [16];
 	
 	/**
 	 * 4x4 Matrix. Game elements [0,15], 0 is the blank space.
 	 */
 	Puzzle(){
 		initGrid();
+        toArray();
 	}
 	
 	/**
@@ -19,9 +21,9 @@ public class Puzzle {
 		for(int r = 0; r < 4; r++){
 			for(int c = 0; c < 4; c++){
 				if(r==3 && c==3){
-					puzzle[r][c] = 0;
+					puzzle_grid[r][c] = 0;
 				}else{
-					puzzle[r][c] = val;
+					puzzle_grid[r][c] = val;
 					val++;
 				}
 			}
@@ -69,9 +71,10 @@ public class Puzzle {
 		
 		if((nextRow >= 0 && nextRow <= 3) && (nextColumn >= 0 && nextColumn <= 3)){
 			if(validMove(p,new Point(nextRow,nextColumn))){
-				int temp = puzzle[nextRow][nextColumn];
-				puzzle[nextRow][nextColumn] = id;
-				puzzle[p.x][p.y] = temp;
+				int temp = puzzle_grid[nextRow][nextColumn];
+				puzzle_grid[nextRow][nextColumn] = id;
+				puzzle_grid[p.x][p.y] = temp;
+                toArray();
 				return true;
 			}else{
 				return false;
@@ -93,14 +96,14 @@ public class Puzzle {
 	
 	/**
 	 * Search piece index in the grid.
-	 * @param id
+	 * @param id Piece id
 	 * @return Point(r,c) where r = row, c = column
 	 */
 	public Point searchIndex(int id){
 		int val;
 		for(int r = 0; r < 4; r++){
 			for(int c = 0; c < 4; c++){
-				val = puzzle[r][c];
+				val = puzzle_grid[r][c];
 				if(val == id){
 					return new Point(r,c);
 				}
@@ -117,7 +120,7 @@ public class Puzzle {
 		int val;
 		for(int r = 0; r < 4; r++){
 			for(int c = 0; c < 4; c++){
-				val = puzzle[r][c];
+				val = puzzle_grid[r][c];
 				if(val == 0){
 					str = str + "|  " + "  " + "\t";
 				}else{
@@ -127,5 +130,59 @@ public class Puzzle {
 			str = str + "|\n+-------+-------+-------+-------+\n";
 		}
 		return str;
+	}
+
+    /**
+     * Transforms the grid representation into the array
+     * and writes it in @puzzle_array
+     */
+	public void toArray(){
+		for (int i=0; i<4; i++)
+			for(int j=0;j<4; j++)
+				puzzle_array[i*4+j]=puzzle_grid[i][j];
+	}
+
+    /**
+     * Transforms the array representation into the grid
+     * and writes it in @puzzle_grid
+     */
+    public void toGrid(){
+        for(int i=0; i<16;i++)
+            puzzle_grid[i/4][i%4]=puzzle_array[i];
+    }
+
+    /**
+     * Checks whether the puzzle is solvable or no
+     * by calculating number of inversions + the row of the blank tile
+     * if odd then it is solvable and vice-versa
+     * @see <a href="https://goo.gl/AO9Fyx">The 8 puzzle problem</a>
+     * @return boolean indicating whether puzzle solvable or not
+     */
+	public boolean isSolvable(){
+		int sum = 0;
+		for(int i=0; i<16; i++) {
+            for (int j = i + 1; j < 16; j++)
+                if (puzzle_array[i] > puzzle_array[j] && puzzle_array[j] != 0)
+                    sum++;
+            sum = (puzzle_array[i]==0) ? sum+i/4 : sum;
+        }
+        return sum%2!=0;
+	}
+
+    /**
+     * Checks whether a passed Puzzle is equal to this puzzle
+     * @param obj an instance of Puzzle
+     * @return true if this puzzle is equal to y
+     */
+	public boolean equals(Object obj){
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Puzzle py = (Puzzle) obj;
+        for(int i = 0; i<16;i++)
+            if(py.puzzle_array[i]!=this.puzzle_array[i])
+                return false;
+        return true;
 	}
 }
