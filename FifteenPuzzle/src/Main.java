@@ -7,6 +7,10 @@ public class Main {
 		System.out.println(p.toString());
 		p.shuffle(100);
 		System.out.println(p.toString());
+        System.out.print(p.isSolvable());
+		Solver s = new Solver(p);
+		s.oop_fitness();
+
 		/*System.out.println("12 up >"+p.movePiece(12, 1));
 		System.out.println(p.toString());
 		System.out.println("12 down >"+p.movePiece(12, 2));
