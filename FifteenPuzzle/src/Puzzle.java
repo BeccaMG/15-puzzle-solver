@@ -42,7 +42,8 @@ public class Puzzle {
 			movePiece(0,direction);
 		}
 	}
-	
+
+    //TODO I think it should move to solver
 	/**
 	 * Move a piece if possible, it can only be moved if it is adjacent to the blank space
 	 * @param id - Piece id
@@ -82,7 +83,8 @@ public class Puzzle {
 		}
 		return false;
 	}
-	
+
+    //TODO I think it should move to solver
 	/**
 	 * Verifies if a desired move is possible
 	 * @param p1 initial position
@@ -185,4 +187,5 @@ public class Puzzle {
                 return false;
         return true;
 	}
+
 }
