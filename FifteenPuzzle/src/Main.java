@@ -1,7 +1,7 @@
 
 public class Main {
-	static Puzzle p = new Puzzle();
-	
+	static Puzzle p = new Puzzle(4);
+
 	public static void main(String[] args){
 		//1 = up, 2 = down, 3 = right, 4 left
 		System.out.println(p.toString());

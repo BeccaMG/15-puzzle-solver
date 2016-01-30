@@ -2,15 +2,18 @@ import java.awt.Point;
 import java.util.Random;
 
 public class Puzzle {
+
+	int size; //if size = n it is an n*n puzzle.
 	Integer[][] puzzle_grid = new Integer[4][4];
-    int [] puzzle_array = new int [16];
-	
+	int [] puzzle_array = new int [16];
+
 	/**
 	 * 4x4 Matrix. Game elements [0,15], 0 is the blank space.
 	 */
-	Puzzle(){
+	Puzzle(int size){
 		initGrid();
         toArray();
+		this.size = size;
 	}
 	
 	/**
@@ -43,7 +46,6 @@ public class Puzzle {
 		}
 	}
 
-    //TODO I think it should move to solver
 	/**
 	 * Move a piece if possible, it can only be moved if it is adjacent to the blank space
 	 * @param id - Piece id
@@ -84,7 +86,6 @@ public class Puzzle {
 		return false;
 	}
 
-    //TODO I think it should move to solver
 	/**
 	 * Verifies if a desired move is possible
 	 * @param p1 initial position
@@ -155,20 +156,23 @@ public class Puzzle {
 
     /**
      * Checks whether the puzzle is solvable or no
-     * by calculating number of inversions + the row of the blank tile
+     * That is done for even-sized-puzzles by calculating number of inversions + the row of the blank tile
      * if odd then it is solvable and vice-versa
+	 * but for odd-sized-puzzles the row of the blank tile is not added and the puzzle is solvable if the sum is even
      * @see <a href="https://goo.gl/AO9Fyx">The 8 puzzle problem</a>
      * @return boolean indicating whether puzzle solvable or not
      */
 	public boolean isSolvable(){
 		int sum = 0;
-		for(int i=0; i<16; i++) {
-            for (int j = i + 1; j < 16; j++)
+		for(int i=0; i<size*size; i++) {
+            for (int j = i + 1; j < size*size; j++)
                 if (puzzle_array[i] > puzzle_array[j] && puzzle_array[j] != 0)
                     sum++;
-            sum = (puzzle_array[i]==0) ? sum+i/4 : sum;
+
+			sum = (puzzle_array[i]==0 && size%2 == 0) ? sum+i/size : sum;
         }
-        return sum%2!=0;
+
+        return sum%2 != size%2;
 	}
 
     /**
