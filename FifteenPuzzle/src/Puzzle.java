@@ -6,6 +6,8 @@ public class Puzzle {
 	Integer[][] puzzle_grid;
     int [] puzzle_array;
     int size;
+    
+    Point pZero = null;
 
     /**
      * nxn Matrix. Game elements [0,n-1], 0 is the blank space.
@@ -17,6 +19,7 @@ public class Puzzle {
 		puzzle_array = new int [size*size];
 		initGrid();
         toArray();
+        pZero = new Point(size-1,size-1);
 	}
 	
     /**
@@ -75,12 +78,19 @@ public class Puzzle {
 			break;
 		}
 		
+		
 		if((nextRow >= 0 && nextRow <= (size-1)) && (nextColumn >= 0 && nextColumn <= (size-1))){
 			if(validMove(p,new Point(nextRow,nextColumn))){
 				int temp = puzzle_grid[nextRow][nextColumn];
 				puzzle_grid[nextRow][nextColumn] = id;
 				puzzle_grid[p.x][p.y] = temp;
                 toArray();
+                
+                if(id == 0){
+        			pZero.x = nextRow;
+        			pZero.y = nextColumn;
+        		}
+                
 				return true;
 			}else{
 				return false;
@@ -106,6 +116,10 @@ public class Puzzle {
 	 * @return Point(r,c) where r = row, c = column
 	 */
 	public Point searchIndex(int id){
+		if(id == 0){
+			return pZero;
+		}
+		
 		int val;
 		for(int r = 0; r < size; r++){
 			for(int c = 0; c < size; c++){
