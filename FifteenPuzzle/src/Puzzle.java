@@ -74,7 +74,7 @@ public class Puzzle {
 			break;
 		}
 		
-		if((nextRow >= 0 && nextRow <= 3) && (nextColumn >= 0 && nextColumn <= 3)){
+		if((nextRow >= 0 && nextRow <= (size-1)) && (nextColumn >= 0 && nextColumn <= (size-1))){
 			if(validMove(p,new Point(nextRow,nextColumn))){
 				int temp = puzzle_grid[nextRow][nextColumn];
 				puzzle_grid[nextRow][nextColumn] = id;
@@ -106,8 +106,8 @@ public class Puzzle {
 	 */
 	public Point searchIndex(int id){
 		int val;
-		for(int r = 0; r < 4; r++){
-			for(int c = 0; c < 4; c++){
+		for(int r = 0; r < size; r++){
+			for(int c = 0; c < size; c++){
 				val = puzzle_grid[r][c];
 				if(val == id){
 					return new Point(r,c);
@@ -146,9 +146,9 @@ public class Puzzle {
      * and writes it in @puzzle_array
      */
 	public void toArray(){
-		for (int i=0; i<4; i++)
-			for(int j=0;j<4; j++)
-				puzzle_array[i*4+j]=puzzle_grid[i][j];
+		for (int i=0; i<size; i++)
+			for(int j=0;j<size; j++)
+				puzzle_array[i*size+j]=puzzle_grid[i][j];
 	}
 
     /**
@@ -156,8 +156,8 @@ public class Puzzle {
      * and writes it in @puzzle_grid
      */
     public void toGrid(){
-        for(int i=0; i<16;i++)
-            puzzle_grid[i/4][i%4]=puzzle_array[i];
+        for(int i=0; i<(size*size);i++)
+            puzzle_grid[i/size][i%size]=puzzle_array[i];
     }
 
     /**
@@ -192,7 +192,7 @@ public class Puzzle {
         if (getClass() != obj.getClass())
             return false;
         Puzzle py = (Puzzle) obj;
-        for(int i = 0; i<16;i++)
+        for(int i = 0; i<(size*size);i++)
             if(py.puzzle_array[i]!=this.puzzle_array[i])
                 return false;
         return true;
