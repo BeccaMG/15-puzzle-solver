@@ -7,9 +7,10 @@ public class Puzzle {
     int [] puzzle_array;
     int size;
 
-	/**
-	 * 4x4 Matrix. Game elements [0,15], 0 is the blank space.
-	 */
+    /**
+     * nxn Matrix. Game elements [0,n-1], 0 is the blank space.
+     * @param n - the dimension of the matrix
+     */
     Puzzle(int size){
 		this.size = size;
 		puzzle_grid = new Integer[size][size];
@@ -18,8 +19,8 @@ public class Puzzle {
         toArray();
 	}
 	
-	/**
-	 * Set puzzle initial values (solution)
+    /**
+	 * Set puzzle initial values (in solved position)
 	 */
     void initGrid(){
 		int val = 1;
