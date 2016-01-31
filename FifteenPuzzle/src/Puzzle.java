@@ -3,27 +3,29 @@ import java.util.Random;
 
 public class Puzzle {
 
-	int size; //if size = n it is an n*n puzzle.
-	Integer[][] puzzle_grid = new Integer[4][4];
-	int [] puzzle_array = new int [16];
+	Integer[][] puzzle_grid;
+    int [] puzzle_array;
+    int size;
 
 	/**
 	 * 4x4 Matrix. Game elements [0,15], 0 is the blank space.
 	 */
-	Puzzle(int size){
+    Puzzle(int size){
+		this.size = size;
+		puzzle_grid = new Integer[size][size];
+		puzzle_array = new int [size*size];
 		initGrid();
         toArray();
-		this.size = size;
 	}
 	
 	/**
 	 * Set puzzle initial values (solution)
 	 */
-	void initGrid(){
+    void initGrid(){
 		int val = 1;
-		for(int r = 0; r < 4; r++){
-			for(int c = 0; c < 4; c++){
-				if(r==3 && c==3){
+		for(int r = 0; r < size; r++){
+			for(int c = 0; c < size; c++){
+				if(r==(size-1) && c==(size-1)){
 					puzzle_grid[r][c] = 0;
 				}else{
 					puzzle_grid[r][c] = val;
@@ -119,10 +121,14 @@ public class Puzzle {
 	 * Prints the current puzzle.
 	 */
 	public String toString(){
-		String str = "+-------+-------+-------+-------+\n";
+		String line = "+";
+		for(int i = 0;i < size;i++){
+			line = line+"-------+";
+		}
+		String str = line+"\n";
 		int val;
-		for(int r = 0; r < 4; r++){
-			for(int c = 0; c < 4; c++){
+		for(int r = 0; r < size; r++){
+			for(int c = 0; c < size; c++){
 				val = puzzle_grid[r][c];
 				if(val == 0){
 					str = str + "|  " + "  " + "\t";
@@ -130,7 +136,7 @@ public class Puzzle {
 					str = str + "|  " + val + "\t";
 				}
 			}
-			str = str + "|\n+-------+-------+-------+-------+\n";
+			str = str + "|\n"+line+"\n";
 		}
 		return str;
 	}
