@@ -5,7 +5,7 @@ public class Puzzle {
 
 	Integer[][] puzzle_grid;
     int [] puzzle_array;
-    int n; // nxn Matrix.
+    int n; // nxn-1 puzzle (ie. a 15puzzle will have an n = 4).
     
     Point pZero = null;
 
@@ -20,6 +20,14 @@ public class Puzzle {
 		initGrid();
         toArray();
         pZero = new Point(n-1,n-1);
+	}
+
+	/**
+	 *
+	 * @return the size of the puzzle
+     */
+	int getSize(){
+		return n;
 	}
 	
     /**
