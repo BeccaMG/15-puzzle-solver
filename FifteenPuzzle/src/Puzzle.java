@@ -5,7 +5,7 @@ public class Puzzle {
 
 	Integer[][] puzzle_grid;
     int [] puzzle_array;
-    int size;
+    int n; // nxn Matrix.
     
     Point pZero = null;
 
@@ -13,13 +13,13 @@ public class Puzzle {
      * nxn Matrix. Game elements [0,n-1], 0 is the blank space.
      * @param n - the dimension of the matrix
      */
-    Puzzle(int size){
-		this.size = size;
-		puzzle_grid = new Integer[size][size];
-		puzzle_array = new int [size*size];
+    Puzzle(int n){
+		this.n = n;
+		puzzle_grid = new Integer[n][n];
+		puzzle_array = new int [n*n];
 		initGrid();
         toArray();
-        pZero = new Point(size-1,size-1);
+        pZero = new Point(n-1,n-1);
 	}
 	
     /**
@@ -27,9 +27,9 @@ public class Puzzle {
 	 */
     void initGrid(){
 		int val = 1;
-		for(int r = 0; r < size; r++){
-			for(int c = 0; c < size; c++){
-				if(r==(size-1) && c==(size-1)){
+		for(int r = 0; r < n; r++){
+			for(int c = 0; c < n; c++){
+				if(r==(n-1) && c==(n-1)){
 					puzzle_grid[r][c] = 0;
 				}else{
 					puzzle_grid[r][c] = val;
@@ -79,7 +79,7 @@ public class Puzzle {
 		}
 		
 		
-		if((nextRow >= 0 && nextRow <= (size-1)) && (nextColumn >= 0 && nextColumn <= (size-1))){
+		if((nextRow >= 0 && nextRow <= (n-1)) && (nextColumn >= 0 && nextColumn <= (n-1))){
 			if(validMove(p,new Point(nextRow,nextColumn))){
 				int temp = puzzle_grid[nextRow][nextColumn];
 				puzzle_grid[nextRow][nextColumn] = id;
@@ -121,8 +121,8 @@ public class Puzzle {
 		}
 		
 		int val;
-		for(int r = 0; r < size; r++){
-			for(int c = 0; c < size; c++){
+		for(int r = 0; r < n; r++){
+			for(int c = 0; c < n; c++){
 				val = puzzle_grid[r][c];
 				if(val == id){
 					return new Point(r,c);
@@ -137,13 +137,13 @@ public class Puzzle {
 	 */
 	public String toString(){
 		String line = "+";
-		for(int i = 0;i < size;i++){
+		for(int i = 0;i < n;i++){
 			line = line+"-------+";
 		}
 		String str = line+"\n";
 		int val;
-		for(int r = 0; r < size; r++){
-			for(int c = 0; c < size; c++){
+		for(int r = 0; r < n; r++){
+			for(int c = 0; c < n; c++){
 				val = puzzle_grid[r][c];
 				if(val == 0){
 					str = str + "|  " + "  " + "\t";
@@ -161,9 +161,9 @@ public class Puzzle {
      * and writes it in @puzzle_array
      */
 	public void toArray(){
-		for (int i=0; i<size; i++)
-			for(int j=0;j<size; j++)
-				puzzle_array[i*size+j]=puzzle_grid[i][j];
+		for (int i=0; i<n; i++)
+			for(int j=0;j<n; j++)
+				puzzle_array[i*n+j]=puzzle_grid[i][j];
 	}
 
     /**
@@ -171,29 +171,29 @@ public class Puzzle {
      * and writes it in @puzzle_grid
      */
     public void toGrid(){
-        for(int i=0; i<(size*size);i++)
-            puzzle_grid[i/size][i%size]=puzzle_array[i];
+        for(int i=0; i<(n*n);i++)
+            puzzle_grid[i/n][i%n]=puzzle_array[i];
     }
 
     /**
      * Checks whether the puzzle is solvable or no
-     * That is done for even-sized-puzzles by calculating number of inversions + the row of the blank tile
+     * That is done for even-nd-puzzles by calculating number of inversions + the row of the blank tile
      * if odd then it is solvable and vice-versa
-	 * but for odd-sized-puzzles the row of the blank tile is not added and the puzzle is solvable if the sum is even
+	 * but for odd-nd-puzzles the row of the blank tile is not added and the puzzle is solvable if the sum is even
      * @see <a href="https://goo.gl/AO9Fyx">The 8 puzzle problem</a>
      * @return boolean indicating whether puzzle solvable or not
      */
 	public boolean isSolvable(){
 		int sum = 0;
-		for(int i=0; i<size*size; i++) {
-            for (int j = i + 1; j < size*size; j++)
+		for(int i=0; i<n*n; i++) {
+            for (int j = i + 1; j < n*n; j++)
                 if (puzzle_array[i] > puzzle_array[j] && puzzle_array[j] != 0)
                     sum++;
 
-			sum = (puzzle_array[i]==0 && size%2 == 0) ? sum+i/size : sum;
+			sum = (puzzle_array[i]==0 && n%2 == 0) ? sum+i/n : sum;
         }
 
-        return sum%2 != size%2;
+        return sum%2 != n%2;
 	}
 
     /**
@@ -207,7 +207,7 @@ public class Puzzle {
         if (getClass() != obj.getClass())
             return false;
         Puzzle py = (Puzzle) obj;
-        for(int i = 0; i<(size*size);i++)
+        for(int i = 0; i<(n*n);i++)
             if(py.puzzle_array[i]!=this.puzzle_array[i])
                 return false;
         return true;
