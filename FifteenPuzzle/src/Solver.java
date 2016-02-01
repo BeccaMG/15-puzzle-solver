@@ -4,7 +4,7 @@ import java.lang.Math.*;
 
 public class Solver {
     
-    Puzzle puzzle;
+
     
     /**
      * Represents a node in the A* algorithm (solver) - more details to come...
@@ -43,23 +43,26 @@ public class Solver {
     
     Solver(Puzzle init){
         //call ff , solve the whole puzzle, gets next move or whatever
-        this.puzzle = init;
+       // this.puzzle = init;
     }
     
-// @TODO think about changing to Hamming distance
+// @TODO check whether it complies with hamming's the real algo
     /**
      * Out Of Place fitness function
      * for each piece in place the degree adds 0.0625
      * @return The degree of the current puzzle as calculated by the oop
      */
-    public double oop_fitness(){ //not object oriented programming :D - nor general at all xD
-        double degree = 1.0;
-        for(int i=0;i<16;i++){
-            if(puzzle.puzzle_array[i]!=i+1 && i!=15)
-                degree-=0.0625;
-            else if(puzzle.puzzle_array[i]!=0 && i==15)
-                degree-=0.0625;
+    public double hammingDistance(Puzzle puzzle){ //not object oriented programming :D - nor general at all xD
+        float degree = 1;
+        int size = puzzle.getSize();
+        size *= size;
+        float weight = 1/(float)size;
+        for(int i=0;i<size;i++){
+            if(puzzle.puzzle_array[i]!=(i+1)%size)
+                degree-= weight;
         }
+        //Use this as a return to return a rounded float to the nearest hundredth
+        //return (float) Math.round(degree*100)/100;
         return degree;
     }
     
