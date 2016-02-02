@@ -48,5 +48,10 @@ public class Main {
 		System.out.print("Child\n"+pChild.toString());
 		System.out.println("\n************ FINISH Test movePiece(int id) ************");
 		
+		//Test movePiece(id)
+		System.out.println("\n\n************ START  Test Puzzle(Integer[] array) ************");
+		Puzzle pFromArray = new Puzzle(new Integer[]{1,2,3,4,5,0,7,8,6});
+		System.out.println(pFromArray.toString());
+		System.out.println("************ FINISH Test Puzzle(Integer[] array) ************");
 	}
 }
