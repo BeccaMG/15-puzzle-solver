@@ -1,4 +1,6 @@
 import java.awt.Point;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 public class Puzzle {
@@ -6,7 +8,6 @@ public class Puzzle {
 	Integer[][] puzzle_grid;
     int [] puzzle_array;
     int n; // nxn-1 puzzle (ie. a 15puzzle will have an n = 4).
-    
     Point pZero = null;
 
     /**
@@ -105,6 +106,60 @@ public class Puzzle {
 			}
 		}
 		return false;
+	}
+	
+	//Solo deberia de ejecutarse cuando se haya verificado que el movimiento es v[alido
+		//Null si no es valido
+		//New Puzzle no the actual puzzle
+	/**
+	 * Move a piece if possible, it can only be moved if it is adjacent to the blank space
+	 * @param id - Piece id
+	 * @return a new Puzzle with the piece specified in the parameter swapped with the blank space
+	 *		   If the piece can't be moved, return NULL
+	 */
+	public Puzzle movePiece(int id){
+		Puzzle child = this.clone();
+		List<Integer> moves = child.validMoves();
+		if(moves.contains(id)){
+			Point index = child.searchIndex(id);
+			child.puzzle_grid[index.x][index.y] = 0;
+			child.puzzle_grid[child.pZero.x][child.pZero.y] = id;
+			child.pZero.x = index.x;
+			child.pZero.y = index.y;
+			toArray();
+			return child;
+		}
+		return null;
+	}
+	
+	/**
+	 * Possible moves
+	 * @return a List of integers, these integers are the blank space neighbors
+	 */
+	public List<Integer> validMoves(){
+		List<Integer> neighbors = new LinkedList<Integer>();
+		Point p = new Point(this.pZero.x,this.pZero.y);
+		int row = p.x;
+		int column = p.y;
+		
+		//search UP
+		if(row != 0){
+			neighbors.add(this.puzzle_grid[row-1][column]);
+		}
+		//search RIGHT
+		if(column != (n-1)){
+			neighbors.add(this.puzzle_grid[row][column+1]);
+		}
+		//search DOWN
+		if(row != (n-1)){
+			neighbors.add(this.puzzle_grid[row+1][column]);
+		}
+		//search LEFT
+		if(column != 0){
+			neighbors.add(this.puzzle_grid[row][column-1]);
+		}
+		
+		return neighbors;
 	}
 
 	/**
@@ -219,5 +274,26 @@ public class Puzzle {
                 return false;
         return true;
 	}
-
+	
+	/**
+	 * Clone the puzzle
+	 * @return new instance of puzzle
+	 */
+	public Puzzle clone(){
+		Puzzle newPuzzle = new Puzzle(this.n);
+		for(int i = 0; i < (n*n); i++){
+			newPuzzle.puzzle_array[i] = this.puzzle_array[i];
+		}
+		newPuzzle.pZero = this.searchIndex(0);
+		newPuzzle.toGrid();
+		return newPuzzle;
+	}
+	
+	/**
+	 * 
+	 * @return true if the puzzle is already solved
+	 */
+	public boolean isSolved(){
+		return this.equals(new Puzzle(this.n));
+	}
 }
