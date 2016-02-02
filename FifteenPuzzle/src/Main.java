@@ -11,7 +11,8 @@ public class Main {
 		System.out.println(p.toString());
         System.out.print(p.isSolvable());
 		Solver s = new Solver(p);
-		System.out.println(s.oop_fitness());
+		// MOSTAFA YOU BROKE IT @MFateen
+// 		System.out.println(s.oop_fitness()); 
 
 		
 	}
