@@ -6,21 +6,43 @@ import java.util.Random;
 public class Puzzle {
 
 	Integer[][] puzzle_grid;
-    int [] puzzle_array;
+    Integer[] puzzle_array;
     int n; // nxn-1 puzzle (ie. a 15puzzle will have an n = 4).
     Point pZero = null;
 
     /**
-     * nxn Matrix. Game elements [0,n-1], 0 is the blank space.
+     * nxn Matrix. Game elements [0,(n*n)-1], 0 is the blank space.
      * @param n - the dimension of the matrix
      */
     Puzzle(int n){
 		this.n = n;
 		puzzle_grid = new Integer[n][n];
-		puzzle_array = new int [n*n];
+		puzzle_array = new Integer[n*n];
 		initGrid();
         toArray();
         pZero = new Point(n-1,n-1);
+	}
+    
+    /**
+     * Game elements [0,(n*n)-1], 0 is the blank space. n = sqrt(array.length)
+     * @param array - a puzzle in an Array representation
+     */
+    Puzzle(Integer[] array){
+		this.n = (int) Math.sqrt(array.length);
+		puzzle_grid = new Integer[n][n];
+		puzzle_array = new Integer[n*n];
+		System.arraycopy(array, 0, puzzle_array, 0, array.length);
+        toGrid();
+        int val;
+		for(int r = 0; r < n; r++){
+			for(int c = 0; c < n; c++){
+				val = puzzle_grid[r][c];
+				if(val == 0){
+					pZero = new Point(r,c);
+					break;
+				}
+			}
+		}
 	}
 
 	/**
