@@ -114,8 +114,7 @@ public class Puzzle {
 	 * @return true = possible, false = not possible
 	 */
 	public boolean validMove(Point p1, Point p2){
-		Point space = searchIndex(0);
-		return space.equals(p1) || space.equals(p2);
+		return pZero.equals(p1) || pZero.equals(p2);
 	}
 	
 	/**
