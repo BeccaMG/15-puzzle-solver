@@ -1,1 +1,1 @@
-/home/juanro/workspace/puzzle/tsp-15-puzzle/FifteenPuzzle/src/Puzzle.java
+../../FifteenPuzzle/src/Puzzle.java
