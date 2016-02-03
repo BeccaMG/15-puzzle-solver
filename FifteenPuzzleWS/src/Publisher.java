@@ -4,7 +4,7 @@ import com.sun.net.httpserver.HttpServer;
  
 public class Publisher {
  
-    static final String BASE_URI = "http://localhost/";
+    static final String BASE_URI = "http://localhost:8888/";
  
     public static void main(String[] args) {
         try {

@@ -22,7 +22,7 @@ public class PuzzleWS {
     @Produces(MediaType.TEXT_PLAIN)
     public String isSolvable(@QueryParam("puzzle") String puzzle) {
         String puzzleString[]  = puzzle.replaceAll("\\[", "").replaceAll("\\]", "").replaceAll(" ", "") .split(","); 
-        Integer puzzleSeed[] = new Integer[puzzleString.length];
+        int puzzleSeed[] = new int[puzzleString.length];
         for (int i = 0; i < puzzleString.length; i++){
             try {
             puzzleSeed[i] = Integer.parseInt(puzzleString[i]);
