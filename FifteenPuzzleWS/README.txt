@@ -1,3 +1,6 @@
+*If bin directory is not created then:
+mkdir bin/
+
 * Compile the server : 
 javac -cp "jars/*" -sourcepath src -d bin src/Server/*.java
 
