@@ -6,7 +6,7 @@ import com.sun.net.httpserver.HttpServer;
  
 public class Publisher {
  
-    static final String BASE_URI = "http://localhost/aws2/";
+    static final String BASE_URI = "http://localhost/";
  
     public static void main(String[] args) {
         try {
