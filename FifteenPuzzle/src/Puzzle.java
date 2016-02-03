@@ -28,7 +28,7 @@ public class Puzzle {
 	 * @return the size of the puzzle
      */
 	int getSize(){
-		return n;
+		return n*n;
 	}
 	
     /**
@@ -287,6 +287,47 @@ public class Puzzle {
 		newPuzzle.pZero = this.searchIndex(0);
 		newPuzzle.toGrid();
 		return newPuzzle;
+	}
+
+
+	//TODO write the javadoc in a better way with list and everything
+	//TODO think about other invariant conditions
+	/**
+	 * Checks on:
+	 * 1- the array's length is equal to the grid's length equal to the size of puzzle
+	 * 2- the grid and the array are equal
+	 * 3- the values of tiles are from 0 to size-1
+	 *
+	 * @return the state of the puzzle
+     */
+	public boolean invariant(){
+
+		//To make sure the array's length is equal to the grid's length equal to the size of puzzle
+		if(puzzle_grid.length*puzzle_grid[0].length != puzzle_array.length)
+			return false;
+		if(puzzle_array.length!=n*n)
+			return false;
+
+		//To make sure the grid and the array are equal
+		for (int i=0; i<n; i++)
+			for(int j=0;j<n; j++)
+				if(puzzle_array[i*n+j]!=puzzle_grid[i][j])
+					return false;
+
+
+		//To make sure there are tiles with values from 0 to n*n-1
+		boolean[] state = new boolean[n*n];
+		for (int i=0; i<n*n; i++)
+			state[i]=false;
+		for (int i=0; i<n*n; i++) {
+			state[puzzle_array[i]] = true;
+		}
+		for (int i=0; i<n*n; i++)
+			if(!state[i])
+				return false;
+
+
+		return true;
 	}
 	
 	/**
