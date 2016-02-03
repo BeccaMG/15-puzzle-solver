@@ -1,5 +1,3 @@
-package Server;
-
 import java.util.*;
 import java.lang.reflect.Method;
 import java.lang.Math.*;
