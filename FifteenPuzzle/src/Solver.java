@@ -60,26 +60,52 @@ public class Solver {
        // this.puzzle = init;
     }
     
-// @TODO check whether it complies with hamming's the real algo
+    //TODO check whether it complies with hamming's the real algo
     /**
-     * Out Of Place fitness function
-     * for each piece in place the degree adds 0.0625
-     * @return The degree of the current puzzle as calculated by the oop
+     * Hamming Distance checks the number of tiles out of place
+     * for each piece in place the degree adds 1/size
+     * @param puzzle the puzzle of which the degree will be computed
+     * @return The degree of the passed puzzle
      */
-    public double hammingDistance(Puzzle puzzle){ //not object oriented programming :D - nor general at all xD
+    public double hammingDistance(Puzzle puzzle){
         float degree = 1;
         int size = puzzle.getSize();
-        size *= size;
         float weight = 1/(float)size;
-        for(int i=0;i<size;i++){
+        for(int i=0;i<size;i++)
             if(puzzle.puzzle_array[i]!=(i+1)%size)
                 degree-= weight;
-        }
+
         //Use this as a return to return a rounded float to the nearest hundredth
         //return (float) Math.round(degree*100)/100;
         return degree;
     }
-    
+
+
+    //TODO get the value of the most mixed up puzzle to return the 1- distance/value
+    /**
+     * Manhattan Distance
+     * compute the degree by calculating the distance between each tile and it's place
+     * @return The degree of the current puzzle
+     */
+    public double manhattanDistance(Puzzle puzzle){
+        int size = puzzle.getSize();
+        int n = (int) Math.sqrt(size);
+        int distance = 0;
+        int temp;
+        //int [] test_array = {0,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1};
+
+        for(int i=0;i<size;i++){
+            if(puzzle.puzzle_array[i]!=0) {
+                temp = Math.abs(i - puzzle.puzzle_array[i] + 1);
+                distance += (temp / n + temp % n);
+            }
+        }
+        return 1- distance/Math.pow(n,3);
+        //return distance;
+    }
+
+
+
     /**
      * aStar
      *
