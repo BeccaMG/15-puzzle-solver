@@ -130,9 +130,6 @@ public class Puzzle {
 		return false;
 	}
 	
-	//Solo deberia de ejecutarse cuando se haya verificado que el movimiento es v[alido
-		//Null si no es valido
-		//New Puzzle no the actual puzzle
 	/**
 	 * Move a piece if possible, it can only be moved if it is adjacent to the blank space
 	 * @param id - Piece id
@@ -144,11 +141,10 @@ public class Puzzle {
 		List<Integer> moves = child.validMoves();
 		if(moves.contains(id)){
 			Point index = child.searchIndex(id);
-			child.puzzle_grid[index.x][index.y] = 0;
 			child.puzzle_grid[child.pZero.x][child.pZero.y] = id;
-			child.pZero.x = index.x;
-			child.pZero.y = index.y;
-			toArray();
+			child.puzzle_grid[index.x][index.y] = 0;
+			child.pZero = new Point(index.x,index.y);
+			child.toArray();			
 			return child;
 		}
 		return null;
@@ -306,8 +302,9 @@ public class Puzzle {
 		for(int i = 0; i < (n*n); i++){
 			newPuzzle.puzzle_array[i] = this.puzzle_array[i];
 		}
-		newPuzzle.pZero = this.searchIndex(0);
+		
 		newPuzzle.toGrid();
+		newPuzzle.pZero = this.searchIndex(0);
 		return newPuzzle;
 	}
 
@@ -324,17 +321,21 @@ public class Puzzle {
 	 */
 	public boolean invariant(){
 		//To make sure the array's length is equal to the grid's length equal to the size of puzzle
-		if(puzzle_grid.length*puzzle_grid[0].length != puzzle_array.length)
+		if(puzzle_grid.length*puzzle_grid[0].length != puzzle_array.length){
+			System.out.println("Grid & Array Lengths distintos");
 			return false;
-		if(puzzle_array.length!=n*n)
+		}
+		if(puzzle_array.length!=n*n){
+			System.out.println("Array no es de n*n");
 			return false;
-
+		}
 		//To make sure the grid and the array are equal
 		for (int i=0; i<n; i++)
 			for(int j=0;j<n; j++)
-				if(puzzle_array[i*n+j]!=puzzle_grid[i][j])
+				if(puzzle_array[i*n+j]!=puzzle_grid[i][j]){
+					System.out.println("Grid & Array distintos");
 					return false;
-
+				}
 		//To make sure there are tiles with values from 0 to n*n-1
 		boolean[] state = new boolean[n*n];
 		for (int i=0; i<n*n; i++)
@@ -342,8 +343,26 @@ public class Puzzle {
 		for (int i=0; i<n*n; i++)
 			state[puzzle_array[i]] = true;
 		for (int i=0; i<n*n; i++)
-			if(!state[i])
+			if(!state[i]){
+				System.out.println("No estan ");
 				return false;
+			}
+		
+		//To make sure the coordinate of the blank space is correct
+		Point zeroCoordinate = null;
+		int val;
+		for(int r = 0; r < n; r++){
+			for(int c = 0; c < n; c++){
+				val = puzzle_grid[r][c];
+				if(val == 0){
+					zeroCoordinate = new Point(r,c);
+				}
+			}
+		}
+		if(!zeroCoordinate.equals(this.searchIndex(0))){
+			System.out.println("Zero coordinate problem");
+			return false;
+		}
 
 		return true;
 	}
