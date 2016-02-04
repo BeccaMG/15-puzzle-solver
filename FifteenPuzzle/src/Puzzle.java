@@ -216,6 +216,10 @@ public class Puzzle {
 	 * Prints the current puzzle.
 	 */
 	public String toString(){
+		//Before printing check invariant 
+		if(!invariant()){
+			System.out.println("WARNING: Something may be wrong in the puzzle");
+		}
 		String line = "+";
 		for(int i = 0;i < n;i++){
 			line = line+"-------+";
@@ -321,21 +325,18 @@ public class Puzzle {
 	 */
 	public boolean invariant(){
 		//To make sure the array's length is equal to the grid's length equal to the size of puzzle
-		if(puzzle_grid.length*puzzle_grid[0].length != puzzle_array.length){
-			System.out.println("Grid & Array Lengths distintos");
+		if(puzzle_grid.length*puzzle_grid[0].length != puzzle_array.length)
 			return false;
-		}
-		if(puzzle_array.length!=n*n){
-			System.out.println("Array no es de n*n");
+
+		if(puzzle_array.length!=n*n)
 			return false;
-		}
+
 		//To make sure the grid and the array are equal
 		for (int i=0; i<n; i++)
 			for(int j=0;j<n; j++)
-				if(puzzle_array[i*n+j]!=puzzle_grid[i][j]){
-					System.out.println("Grid & Array distintos");
+				if(puzzle_array[i*n+j]!=puzzle_grid[i][j])
 					return false;
-				}
+				
 		//To make sure there are tiles with values from 0 to n*n-1
 		boolean[] state = new boolean[n*n];
 		for (int i=0; i<n*n; i++)
@@ -343,11 +344,9 @@ public class Puzzle {
 		for (int i=0; i<n*n; i++)
 			state[puzzle_array[i]] = true;
 		for (int i=0; i<n*n; i++)
-			if(!state[i]){
-				System.out.println("No estan ");
+			if(!state[i])
 				return false;
-			}
-		
+					
 		//To make sure the coordinate of the blank space is correct
 		Point zeroCoordinate = null;
 		int val;
@@ -359,11 +358,9 @@ public class Puzzle {
 				}
 			}
 		}
-		if(!zeroCoordinate.equals(this.searchIndex(0))){
-			System.out.println("Zero coordinate problem");
+		if(!zeroCoordinate.equals(this.searchIndex(0)))
 			return false;
-		}
-
+		
 		return true;
 	}
 	
