@@ -201,8 +201,7 @@ public class Solver {
             long end = System.currentTimeMillis();
             System.out.println("Time: " + (end-start)/1000 + " seconds");
 //             System.out.println("Maxn: " + maxn);
-//             return currentPuzzleNode.getListOfSteps();
-            return null;
+             return currentPuzzleNode.getListOfSteps();
         } catch (Exception e) {
             e.printStackTrace();
             return null;

@@ -10,7 +10,7 @@ public class Main {
 		//1 = up, 2 = down, 3 = right, 4 left
 // 		System.out.println(p.toString());
 // 		System.out.println("Displayed puzzle solved? (should be true)... "+p.isSolved());
-		p.shuffle(500);
+		p.shuffle(100);
 // 		System.out.println("Shuffled  puzzle solved? (should be false)... "+p.isSolved()+"\n");
 // 		System.out.println(Arrays.toString(p.puzzle_array));
 // 		System.out.println(p.toString());
