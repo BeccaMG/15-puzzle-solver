@@ -77,9 +77,12 @@ public class Puzzle {
 	public void shuffle(int times){
 		Random r = new Random();
 		int direction;
+		
 		for(int i = 0; i <= times; i++){
-			direction = r.nextInt(4)+1;
-			movePiece(0,direction);
+            direction = r.nextInt(4)+1;
+            while (!movePiece(0, direction)) {
+                direction = r.nextInt(4)+1;
+            }
 		}
 	}
 
@@ -285,14 +288,16 @@ public class Puzzle {
      * @param obj an instance of Puzzle
      * @return true if this puzzle is equal to y
      */
-	public boolean equals(Object obj){
+	public boolean equals(Object obj) {
         if (obj == null)
             return false;
-        if (getClass() != obj.getClass())
+        if (this.getClass() != obj.getClass())
             return false;
+            
         Puzzle py = (Puzzle) obj;
+        
         for(int i = 0; i<(n*n);i++)
-            if(py.puzzle_array[i]!=this.puzzle_array[i])
+            if(py.puzzle_array[i] != this.puzzle_array[i])
                 return false;
         return true;
 	}
@@ -301,7 +306,7 @@ public class Puzzle {
 	 * Clone the puzzle
 	 * @return new instance of puzzle
 	 */
-	public Puzzle clone(){
+	public Puzzle clone() {
 		Puzzle newPuzzle = new Puzzle(this.n);
 		for(int i = 0; i < (n*n); i++){
 			newPuzzle.puzzle_array[i] = this.puzzle_array[i];
