@@ -4,33 +4,24 @@ import java.lang.Math.*;
 
 public class Solver {
 
-
     /**
      * Represents a node in the A* algorithm (solver) - more details to come...
      *
      * @see <a href="http://www.cs.princeton.edu/courses/archive/spr10/cos226/assignments/8puzzle.html">The 8-Puzzle</a>
      */
     class PuzzleNode implements Comparable<PuzzleNode> {
-        Puzzle currentState;
-        Puzzle previousState; // To don't enqueue the previous state
-        float priority; // Priority = number of moves + fitness function
-        int movesDoneSoFar;
-        List<Integer> listOfSteps; // To keep a track of movements
+        private Puzzle currentState;
+        private Puzzle previousState; // To don't enqueue the previous state
+        public double priority; // Priority = number of moves + fitness function
+        private int movesDoneSoFar;
+        private List<Integer> listOfSteps; // To keep a track of movements
 
-        public PuzzleNode(Puzzle current, Puzzle previous, float priority, int moves) {
+        public PuzzleNode(Puzzle current, Puzzle previous, double priority, int moves) {
             this.currentState = current;
             this.previousState = previous;
             this.priority = priority;
             this.movesDoneSoFar = moves;
             this.listOfSteps = new ArrayList<Integer>();
-        }
-
-        public PuzzleNode(Puzzle current, Puzzle previous, float priority, int moves, Integer newStep) {
-            this.currentState = current;
-            this.previousState = previous;
-            this.priority = priority;
-            this.movesDoneSoFar = moves;
-            this.listOfSteps.add(newStep);
         }
 
         public Puzzle getCurrentState() {
@@ -47,6 +38,11 @@ public class Solver {
 
         public List<Integer> getListOfSteps() {
             return this.listOfSteps;
+        }
+
+        public void addStepToList(List<Integer> list, Integer step) {
+            this.listOfSteps.addAll(list);
+            this.listOfSteps.add(step);
         }
 
         @Override
@@ -128,60 +124,92 @@ public class Solver {
      */
     public List<Integer> aStar(Puzzle puzzle, Method fitnessFunction) {
 
+        long start = System.currentTimeMillis();
         // If the puzzle is not solvable, return null. (Or might throw an exception depending of our implementation)
         if (!puzzle.isSolvable())
             return null;
 
+        List<Integer> maxs;
+        int maxn = 0;
+
         PriorityQueue<PuzzleNode> pqueue = new PriorityQueue<PuzzleNode>();
 
         try { // Execute the fitnessFunction
-            Object[] parameters = new Object[1];
-            Object result = new Object(); // Float with the fitness value
-            parameters[0] = puzzle; // The fitness function should receive a puzzle        
-            fitnessFunction.invoke(result, parameters);
+
+            double result = (double) fitnessFunction.invoke(this, puzzle);  // REFLECTION NOT COMPLETELY WELL USED
+
+//             System.out.println(result); // First result
 
             // Enqueue the initial state of the board (passed as parameter)
             // with its priority computed and 0 moves done so far.
-            pqueue.add(new PuzzleNode(puzzle, null, (float) result, 0));
+            pqueue.add(
+                new PuzzleNode(puzzle, null, result, 0)
+            );
+
             PuzzleNode currentPuzzleNode = pqueue.poll();
 
             List<Integer> validMoves = new ArrayList<Integer>();
             Puzzle currentPuzzle = currentPuzzleNode.getCurrentState();
-            Puzzle neighbor = new Puzzle(4); // Obviously it's not like that
+            Puzzle neighbor;
+            PuzzleNode newPuzzleNode;
+            double newPriority = 0;
+            int newMoves;
 
-//             while (!currentPuzzle.isSolved() 
-//                    && !pqueue.isEmpty()) {
-            while (!pqueue.isEmpty()) {
-//                 validMoves = currentPuzzle.validMoves();
+            System.out.println("START Puzzle in aStar with " + result + "\n" + currentPuzzle.toString());
+//             int i = 0;
+            while (!currentPuzzle.isSolved()) {
+//                     !pqueue.isEmpty()) {
+//             for (int i = 0; i < 100; i++) {
+//                 System.out.println(i+"-Puzzle in aStar with " +
+//                 currentPuzzleNode.priority + "\n" + currentPuzzle.toString());
+
+                validMoves = currentPuzzle.validMoves();
 
                 for (Integer tile : validMoves) {
+//                     System.out.println("Valid move: " + tile);
                     // This will give me a board with the moved piece
-//                     neighbor = currentPuzzle.movePiece((int) tile);
+                    neighbor = currentPuzzle.movePiece(tile);
+//                     System.out.println("neighbor\n" + neighbor.toString());
 
                     // Optimization to not enqueue when I already used that board
                     if (!neighbor.equals(currentPuzzleNode.getPreviousState())) {
-                        parameters[0] = neighbor;
-                        fitnessFunction.invoke(result, parameters);
+                        result = (double) fitnessFunction.invoke(this, neighbor);
+                        // TEST
+                        newMoves = currentPuzzleNode.getMovesDoneSoFar() + 1;
+//                         newPriority = result - (newMoves/87);
+                        newPriority = result + newMoves;
+                        newPuzzleNode = new PuzzleNode(
+                                            neighbor,
+                                            currentPuzzle,
+                                            newPriority, // Think about adding the moves done...
+                                            newMoves
+                                        );
+                        newPuzzleNode.addStepToList(currentPuzzleNode.getListOfSteps(), tile);
 
-                        pqueue.add(
-                                new PuzzleNode(
-                                        neighbor,
-                                        currentPuzzle,
-                                        (float) result, // Think about adding the moves done...
-                                        currentPuzzleNode.getMovesDoneSoFar() + 1,
-                                        tile
-                                ));
-
-                        currentPuzzleNode = pqueue.poll();
-                        currentPuzzle = currentPuzzleNode.getCurrentState();
+                        pqueue.add(newPuzzleNode);
                     }
+
+//                     i++;
                 }
+
+                if (currentPuzzleNode.getListOfSteps().size() > maxn) {
+                    maxs = currentPuzzleNode.getListOfSteps();
+                    maxn = maxs.size();
+                }
+                currentPuzzleNode = pqueue.poll();
+                currentPuzzle = currentPuzzleNode.getCurrentState();
+
             }
-
+//
             // Supposed to find the solution
-            return currentPuzzleNode.getListOfSteps();
-
+            System.out.println("SOLVED Puzzle in aStar\n" + currentPuzzle.toString());
+            System.out.println("Solution in " + currentPuzzleNode.getListOfSteps().size() + " steps:\n" + currentPuzzleNode.getListOfSteps());
+            long end = System.currentTimeMillis();
+            System.out.println("Time: " + (end-start)/1000 + " seconds");
+//             System.out.println("Maxn: " + maxn);
+             return currentPuzzleNode.getListOfSteps();
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
 

@@ -77,9 +77,12 @@ public class Puzzle {
 	public void shuffle(int times){
 		Random r = new Random();
 		int direction;
+		
 		for(int i = 0; i <= times; i++){
-			direction = r.nextInt(4)+1;
-			movePiece(0,direction);
+            direction = r.nextInt(4)+1;
+            while (!movePiece(0, direction)) {
+                direction = r.nextInt(4)+1;
+            }
 		}
 	}
 
@@ -130,9 +133,6 @@ public class Puzzle {
 		return false;
 	}
 	
-	//Solo deberia de ejecutarse cuando se haya verificado que el movimiento es v[alido
-		//Null si no es valido
-		//New Puzzle no the actual puzzle
 	/**
 	 * Move a piece if possible, it can only be moved if it is adjacent to the blank space
 	 * @param id - Piece id
@@ -144,11 +144,10 @@ public class Puzzle {
 		List<Integer> moves = child.validMoves();
 		if(moves.contains(id)){
 			Point index = child.searchIndex(id);
-			child.puzzle_grid[index.x][index.y] = 0;
 			child.puzzle_grid[child.pZero.x][child.pZero.y] = id;
-			child.pZero.x = index.x;
-			child.pZero.y = index.y;
-			toArray();
+			child.puzzle_grid[index.x][index.y] = 0;
+			child.pZero = new Point(index.x,index.y);
+			child.toArray();			
 			return child;
 		}
 		return null;
@@ -220,6 +219,10 @@ public class Puzzle {
 	 * Prints the current puzzle.
 	 */
 	public String toString(){
+		//Before printing check invariant 
+		if(!invariant()){
+			System.out.println("WARNING: Something may be wrong in the puzzle");
+		}
 		String line = "+";
 		for(int i = 0;i < n;i++){
 			line = line+"-------+";
@@ -285,14 +288,16 @@ public class Puzzle {
      * @param obj an instance of Puzzle
      * @return true if this puzzle is equal to y
      */
-	public boolean equals(Object obj){
+	public boolean equals(Object obj) {
         if (obj == null)
             return false;
-        if (getClass() != obj.getClass())
+        if (this.getClass() != obj.getClass())
             return false;
+            
         Puzzle py = (Puzzle) obj;
+        
         for(int i = 0; i<(n*n);i++)
-            if(py.puzzle_array[i]!=this.puzzle_array[i])
+            if(py.puzzle_array[i] != this.puzzle_array[i])
                 return false;
         return true;
 	}
@@ -301,13 +306,14 @@ public class Puzzle {
 	 * Clone the puzzle
 	 * @return new instance of puzzle
 	 */
-	public Puzzle clone(){
+	public Puzzle clone() {
 		Puzzle newPuzzle = new Puzzle(this.n);
 		for(int i = 0; i < (n*n); i++){
 			newPuzzle.puzzle_array[i] = this.puzzle_array[i];
 		}
-		newPuzzle.pZero = this.searchIndex(0);
+		
 		newPuzzle.toGrid();
+		newPuzzle.pZero = this.searchIndex(0);
 		return newPuzzle;
 	}
 
@@ -326,6 +332,7 @@ public class Puzzle {
 		//To make sure the array's length is equal to the grid's length equal to the size of puzzle
 		if(puzzle_grid.length*puzzle_grid[0].length != puzzle_array.length)
 			return false;
+
 		if(puzzle_array.length!=n*n)
 			return false;
 
@@ -334,7 +341,7 @@ public class Puzzle {
 			for(int j=0;j<n; j++)
 				if(puzzle_array[i*n+j]!=puzzle_grid[i][j])
 					return false;
-
+				
 		//To make sure there are tiles with values from 0 to n*n-1
 		boolean[] state = new boolean[n*n];
 		for (int i=0; i<n*n; i++)
@@ -344,7 +351,21 @@ public class Puzzle {
 		for (int i=0; i<n*n; i++)
 			if(!state[i])
 				return false;
-
+					
+		//To make sure the coordinate of the blank space is correct
+		Point zeroCoordinate = null;
+		int val;
+		for(int r = 0; r < n; r++){
+			for(int c = 0; c < n; c++){
+				val = puzzle_grid[r][c];
+				if(val == 0){
+					zeroCoordinate = new Point(r,c);
+				}
+			}
+		}
+		if(!zeroCoordinate.equals(this.searchIndex(0)))
+			return false;
+		
 		return true;
 	}
 	
