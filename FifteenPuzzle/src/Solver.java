@@ -1,6 +1,5 @@
 import java.util.*;
 import java.lang.reflect.Method;
-import java.lang.Math.*;
 
 public class Solver {
 
@@ -70,7 +69,7 @@ public class Solver {
         int size = puzzle.getSize();
         float weight = 1 / (float) size;
         for (int i = 0; i < size; i++)
-            if (puzzle.puzzle_array[i] != (i + 1) % size)
+            if (puzzle.toArray()[i] != (i + 1) % size)
                 degree -= weight;
 
         //Use this as a return to return a rounded float to the nearest hundredth
@@ -95,15 +94,16 @@ public class Solver {
 //        int [] test_array = {0,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1};
 //        int [] test_array = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,0};
         for (int i = 0; i < size; i++) {
-            if (puzzle.puzzle_array[i] != 0) {
+            if (puzzle.toArray()[i] != 0) {
                 //difference in rows between current place and the correct one
-                rows = Math.abs(i/n - (puzzle.puzzle_array[i] - 1)/n);
+                rows = Math.abs(i/n - (puzzle.toArray()[i] - 1)/n);
                 //difference in columns between current place and the correct one
-                columns = Math.abs(i%n - (puzzle.puzzle_array[i] - 1)%n);
+                columns = Math.abs(i%n - (puzzle.toArray()[i] - 1)%n);
                 distance += rows + columns;
             }
         }
-        //return 1 - distance / Math.pow(n, 3);
+//         return (distance / Math.pow(n, 3));
+//         return 1 - distance / Math.pow(n, 3);
         return distance;
     }
 
@@ -153,6 +153,7 @@ public class Solver {
             Puzzle neighbor;
             PuzzleNode newPuzzleNode;
             double newPriority = 0;
+//             int newMoves;
             int newMoves;
 
             System.out.println("START Puzzle in aStar with " + result + "\n" + currentPuzzle.toString());
@@ -176,7 +177,7 @@ public class Solver {
                         result = (double) fitnessFunction.invoke(this, neighbor);
                         // TEST
                         newMoves = currentPuzzleNode.getMovesDoneSoFar() + 1;
-//                         newPriority = result - (newMoves/87);
+//                         newPriority = result + ((newMoves * 1.0) / 80.0);
                         newPriority = result + newMoves;
                         newPuzzleNode = new PuzzleNode(
                                             neighbor,
@@ -214,4 +215,99 @@ public class Solver {
         }
 
     }
+        
+        
+    public double search(Puzzle puzzle, double cost, double bound, Method fitnessFunction) {
+    
+        try {
+            
+            double f = cost + (double) fitnessFunction.invoke(this, puzzle);
+            if (f > bound)
+                return f;
+            if (puzzle.isSolved())
+                return -1.0;
+            
+            double min = Double.POSITIVE_INFINITY;
+            
+            List<Integer> validMoves = new ArrayList<Integer>();
+            Puzzle neighbor;
+            validMoves = puzzle.validMoves();
+                
+            for (Integer tile : validMoves) {
+                neighbor = puzzle.movePiece(tile);
+                double t = search(neighbor, cost + 1.0, bound, fitnessFunction);
+                if (t == -1.0)
+                    return -1.0;
+                if (t < min)
+                    min = t;
+            }
+            
+            return min;
+                
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -3.0;
+        }
+    
+    }
+        
+    /**
+     * aStar
+     * <p>
+     * A* Algorithm
+     *
+     * @param puzzle          The puzzle to solve
+     * @param fitnessFunction Fitness function used to compute the priority of
+     *                        nodes (states of the puzzle).
+     * @return The ordered list of steps to follow for solving the puzzle, in
+     * the form of Integer meaning which tile to move (swap with the
+     * blank space).
+     * @see <a href="https://en.wikipedia.org/wiki/A*_search_algorithm">A* Search Algorithm</a>
+     * @see <a href="http://www.cs.princeton.edu/courses/archive/spr10/cos226/assignments/8puzzle.html">The 8-Puzzle</a>
+     */
+    public double idaStar(Puzzle puzzle, Method fitnessFunction) {
+
+        long start = System.currentTimeMillis();
+        // If the puzzle is not solvable, return null. (Or might throw an exception depending of our implementation)
+        if (!puzzle.isSolvable())
+            return -2.0;
+    
+        double returnValue;
+    
+        try { // Execute the fitnessFunction
+
+            double bound = (double) fitnessFunction.invoke(this, puzzle);  // REFLECTION NOT COMPLETELY WELL USED
+            long end;
+            System.out.println("START Puzzle in idaStar with " + bound + "\n" + puzzle.toString());
+
+            while (true) {
+                
+                double t = search(puzzle, 0, bound, fitnessFunction);
+                if (t == -1.0) {
+                    end = System.currentTimeMillis();
+                    System.out.println("Time: " + (end-start)/1000 + " seconds");
+                    return -1.0; //FOUND
+                }
+                if (t == Double.POSITIVE_INFINITY) {
+                    end = System.currentTimeMillis();
+                    System.out.println("Time: " + (end-start)/1000 + " seconds");
+                    return-2.0; //NOT_FOUND
+                }
+                if (t == -3.0) {
+                    end = System.currentTimeMillis();
+                    System.out.println("Time: " + (end-start)/1000 + " seconds");
+                    return -3.0; //EXCEPTION
+                }
+                bound = t;
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -3.0;
+        }
+
+    }
+        
+    
 }
