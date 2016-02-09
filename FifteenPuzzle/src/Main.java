@@ -16,7 +16,7 @@ public class Main {
 // 		System.out.println(Arrays.toString(p.puzzle_array));
 // 		System.out.println(p.toString());
 //         System.out.println(p.isSolvable());
-		Solver s = new Solver(p);
+		Solver s = new Solver();
 //  		System.out.println("Hamming distance = "+s.hammingDistance(p));
 //         System.out.println("Manhattan distance = "+s.manhattanDistance(p));
 
@@ -77,33 +77,29 @@ public class Main {
 //         
 //         
         
-        System.out.println("\n\n************ START  Test aStar() ************");
-//      System.out.print("Puzzle\n"+p.toString());
-        
         Class[] argTypes = new Class[] { Puzzle.class };
-        
+
+        System.out.println("\n\n************ START  Test aStar() ************");
         try {
             Method m = (Solver.class).getDeclaredMethod("manhattanDistance", argTypes);
             List<Integer> list = s.aStar(p, m);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
         System.out.println("************ FINISH Test aStar() ************");
         
+
+
         
-// 		System.out.println("\n\n************ START  Test idaStar() ************");
-// // 		System.out.print("Puzzle\n"+p.toString());
-// 		
-// // 		try {
-// // //             Method m = (Solver.class).getDeclaredMethod("manhattanDistance", argTypes);
-// // //             double d = s.idaStar(p, m);
-// //             System.out.println(d);
-// //         } catch (Exception e) {
-// //             e.printStackTrace();
-// //         }
-// 		
-// 		System.out.println("************ FINISH Test idaStar() ************");
+		System.out.println("\n\n************ START  Test idaStar() ************");
+		try {
+            Method m = (Solver.class).getDeclaredMethod("manhattanDistance", argTypes);
+            double d = s.idaStar(p, m);
+            System.out.println(d);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+		System.out.println("************ FINISH Test idaStar() ************");
 		
 // 		System.out.println("\n\n************ START   Test followMovements() ************");
 // 		Puzzle pshuffled = new Puzzle(new int []{1,2,4,8,0,5,3,13,10,6,14,7,9,11,15,12});

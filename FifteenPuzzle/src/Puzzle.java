@@ -72,29 +72,12 @@ public class Puzzle {
     }
 
     /**
-     * Set puzzle initial values (in solved position)
-     */
-    private void initGrid() {
-        int val = 1;
-        for (int r = 0; r < n; r++) {
-            for (int c = 0; c < n; c++) {
-                if (r == (n - 1) && c == (n - 1)) {
-                    puzzle_grid[r][c] = 0;
-                } else {
-                    puzzle_grid[r][c] = val;
-                    val++;
-                }
-            }
-        }
-    }
-
-    /**
      * Shuffles the puzzle making 10^(n-1) random movements.
      *
      * @param times - number of random movements to shuffle the puzzle
      */
     public void shuffle() {
-    	int times = (int) Math.pow(10, (this.n-1));
+    	int times = (int) Math.pow(10, (this.n)-1);
         Random r = new Random();
         int direction;
         for (int i = 0; i <= times; i++) {
@@ -103,46 +86,6 @@ public class Puzzle {
                 direction = r.nextInt(4) + 1;
             }
         }
-    }
-
-    /**
-     * Move the blank space if possible.
-     *
-     * @param direction - 1 = up, 2 = down, 3 = right, 4 left
-     * @return true = piece moved, false = invalid move
-     */
-    private boolean moveBlankSpace(int direction) {
-        int nextRow = pZero.x;
-        int nextColumn = pZero.y;
-
-        switch (direction) {
-            case 1: //up
-                nextRow--;
-                break;
-            case 2: //down
-                nextRow++;
-                break;
-            case 3: //right
-                nextColumn++;
-                break;
-            case 4: //left
-                nextColumn--;
-                break;
-        }
-
-        if ((nextRow >= 0 && nextRow <= (n - 1)) && (nextColumn >= 0 && nextColumn <= (n - 1))) {
-        	int temp = puzzle_grid[nextRow][nextColumn];
-            puzzle_grid[nextRow][nextColumn] = 0;
-            puzzle_grid[pZero.x][pZero.y] = temp;
-                
-            puzzle_array[nextRow * n + nextColumn] = 0;
-            puzzle_array[pZero.x * n + pZero.y] = temp;
-               
-            pZero = new Point(nextRow,nextColumn);
-               
-            return true;
-        }
-        return false;
     }
 
     /**
@@ -198,29 +141,6 @@ public class Puzzle {
         }
 
         return neighbors;
-    }
-
-    /**
-     * Search piece index in the grid.
-     *
-     * @param id Piece id
-     * @return Point(r, c) where r = row, c = column
-     */
-    private Point searchIndex(int id) {
-        if (id == 0) {
-            return pZero;
-        }
-
-        int val;
-        for (int r = 0; r < n; r++) {
-            for (int c = 0; c < n; c++) {
-                val = puzzle_grid[r][c];
-                if (val == id) {
-                    return new Point(r, c);
-                }
-            }
-        }
-        return null;
     }
 
     /**
@@ -387,4 +307,85 @@ public class Puzzle {
             pZero = new Point(index.x, index.y);
         }
     }
+    
+    /**
+     * Set puzzle initial values (in solved position)
+     */
+    private void initGrid() {
+        int val = 1;
+        for (int r = 0; r < n; r++) {
+            for (int c = 0; c < n; c++) {
+                if (r == (n - 1) && c == (n - 1)) {
+                    puzzle_grid[r][c] = 0;
+                } else {
+                    puzzle_grid[r][c] = val;
+                    val++;
+                }
+            }
+        }
+    }
+    
+    /**
+     * Move the blank space if possible.
+     *
+     * @param direction - 1 = up, 2 = down, 3 = right, 4 left
+     * @return true = piece moved, false = invalid move
+     */
+    private boolean moveBlankSpace(int direction) {
+        int nextRow = pZero.x;
+        int nextColumn = pZero.y;
+
+        switch (direction) {
+            case 1: //up
+                nextRow--;
+                break;
+            case 2: //down
+                nextRow++;
+                break;
+            case 3: //right
+                nextColumn++;
+                break;
+            case 4: //left
+                nextColumn--;
+                break;
+        }
+
+        if ((nextRow >= 0 && nextRow <= (n - 1)) && (nextColumn >= 0 && nextColumn <= (n - 1))) {
+        	int temp = puzzle_grid[nextRow][nextColumn];
+            puzzle_grid[nextRow][nextColumn] = 0;
+            puzzle_grid[pZero.x][pZero.y] = temp;
+                
+            puzzle_array[nextRow * n + nextColumn] = 0;
+            puzzle_array[pZero.x * n + pZero.y] = temp;
+               
+            pZero = new Point(nextRow,nextColumn);
+               
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * Search piece index in the grid.
+     *
+     * @param id Piece id
+     * @return Point(r, c) where r = row, c = column
+     */
+    private Point searchIndex(int id) {
+        if (id == 0) {
+            return pZero;
+        }
+
+        int val;
+        for (int r = 0; r < n; r++) {
+            for (int c = 0; c < n; c++) {
+                val = puzzle_grid[r][c];
+                if (val == id) {
+                    return new Point(r, c);
+                }
+            }
+        }
+        return null;
+    }
+
 }
