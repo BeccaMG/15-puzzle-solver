@@ -57,22 +57,24 @@ public class Solver {
         this.normalizedStepCost = (1.0/80.0);
     }*/
 
-    //TODO check whether it complies with hamming's the real algo
-
     /**
      * Hamming Distance checks the number of tiles out of place
-     * for each piece in place the degree adds 1/size
+     * for each piece in place the degree adds 1/(size-1)
+     *
+     * <br>The Zero tile is not taken into consideration so that the fitness function
+     * becomes admissible
+     * @see <a href="https://goo.gl/AO9Fyx"></a>
      *
      * @param puzzle the puzzle of which the degree will be computed
      * @return The degree of the passed puzzle
      */
     public double hammingDistance(Puzzle puzzle) {
-        float degree = 1;
+        float degree = 0;
         int size = puzzle.getSize();
-        float weight = 1 / (float) size;
+        float weight = 1 / ((float) size-1);
         for (int i = 0; i < size; i++)
-            if (puzzle.toArray()[i] != (i + 1) % size)
-                degree -= weight;
+            if ((puzzle.toArray()[i] != (i + 1) % size) && (puzzle.toArray()[i] != 0))
+                degree += weight;
 
         //Use this as a return to return a rounded float to the nearest hundredth
         //return (float) Math.round(degree*100)/100;
