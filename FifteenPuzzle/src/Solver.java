@@ -56,8 +56,7 @@ public class Solver {
         // this.puzzle = init;
     }
 
-    //TODO check whether it complies with hamming's the real algo
-
+    //TODO check whether it complies with hamming's real algo
     /**
      * Hamming Distance checks the number of tiles out of place
      * for each piece in place the degree adds 1/size
@@ -66,12 +65,12 @@ public class Solver {
      * @return The degree of the passed puzzle
      */
     public double hammingDistance(Puzzle puzzle) {
-        float degree = 1;
+        float degree = 0;
         int size = puzzle.getSize();
         float weight = 1 / (float) size;
         for (int i = 0; i < size; i++)
             if (puzzle.puzzle_array[i] != (i + 1) % size)
-                degree -= weight;
+                degree += weight;
 
         //Use this as a return to return a rounded float to the nearest hundredth
         //return (float) Math.round(degree*100)/100;
@@ -80,7 +79,6 @@ public class Solver {
 
 
     //TODO get the value of the most mixed up puzzle to return the 1- distance/value
-
     /**
      * Manhattan Distance
      * compute the degree by calculating the distance between each tile and it's place
