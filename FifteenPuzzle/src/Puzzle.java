@@ -6,36 +6,44 @@ import java.util.Random;
 
 public class Puzzle {
 
-    int[][] puzzle_grid;
-    int[] puzzle_array;
-    int n; // nxn-1 puzzle (ie. a 15puzzle will have an n = 4).
-    Point pZero = null;
+    private int[][] puzzle_grid;
+    private int[] puzzle_array;
+    private int n; // (nxn-1)-puzzle (ie. a 15-puzzle will have an n = 4)
+    private Point pZero = null;
 
     /**
-     * nxn Matrix. Game elements [0,(n*n)-1], 0 is the blank space.
-     *
+     * nxn Matrix. Game elements [0,(n*n)-1], 0 is the blank space. The puzzle generated would be solved.
+     * 	
      * @param n - the dimension of the matrix
      */
-    Puzzle(int n) {
+    public Puzzle(int n) {
         this.n = n;
         puzzle_grid = new int[n][n];
         puzzle_array = new int[n * n];
         initGrid();
-        toArray();
+        
+        for (int r = 0; r < n; r++)
+            for (int c = 0; c < n; c++)
+                puzzle_array[r * n + c] = puzzle_grid[r][c];
+
         pZero = new Point(n - 1, n - 1);
     }
 
     /**
-     * Game elements [0,(n*n)-1], 0 is the blank space. n = sqrt(array.length)
+     * Initialize a puzzle from an array.
+     * Game elements [0,(n*n)-1], 0 is the blank space. n = sqrt(array.length).
      *
      * @param array - a puzzle in an Array representation
      */
-    Puzzle(int[] array) {
+    public Puzzle(int[] array) {
         this.n = (int) Math.sqrt(array.length);
         puzzle_grid = new int[n][n];
         puzzle_array = new int[n * n];
         System.arraycopy(array, 0, puzzle_array, 0, array.length);
-        toGrid();
+        
+        for (int i = 0; i < (n * n); i++)
+        	puzzle_grid[i / n][i % n] = puzzle_array[i];
+        
         int val;
         for (int r = 0; r < n; r++) {
             for (int c = 0; c < n; c++) {
@@ -49,16 +57,24 @@ public class Puzzle {
     }
 
     /**
-     * @return the size of the puzzle
+     * @return the size of the puzzle (total tiles, including the blank space)
      */
-    int getSize() {
+    public int getSize() {
         return n * n;
+    }
+    
+    /**
+     * 
+     * @return the Array representation of the puzzle
+     */
+    public int [] toArray(){
+    	return this.puzzle_array;
     }
 
     /**
      * Set puzzle initial values (in solved position)
      */
-    void initGrid() {
+    private void initGrid() {
         int val = 1;
         for (int r = 0; r < n; r++) {
             for (int c = 0; c < n; c++) {
@@ -73,33 +89,31 @@ public class Puzzle {
     }
 
     /**
-     * Shuffles the puzzle
+     * Shuffles the puzzle making 10^(n-1) random movements.
      *
      * @param times - number of random movements to shuffle the puzzle
      */
-    public void shuffle(int times) {
+    public void shuffle() {
+    	int times = (int) Math.pow(10, (this.n-1));
         Random r = new Random();
         int direction;
-
         for (int i = 0; i <= times; i++) {
             direction = r.nextInt(4) + 1;
-            while (!movePiece(0, direction)) {
+            while (!moveBlankSpace(direction)) {
                 direction = r.nextInt(4) + 1;
             }
         }
     }
 
     /**
-     * Move a piece if possible, it can only be moved if it is adjacent to the blank space
+     * Move the blank space if possible.
      *
-     * @param id        - Piece id
      * @param direction - 1 = up, 2 = down, 3 = right, 4 left
      * @return true = piece moved, false = invalid move
      */
-    public boolean movePiece(int id, int direction) {
-        Point p = searchIndex(id);
-        int nextRow = p.x;
-        int nextColumn = p.y;
+    private boolean moveBlankSpace(int direction) {
+        int nextRow = pZero.x;
+        int nextColumn = pZero.y;
 
         switch (direction) {
             case 1: //up
@@ -116,23 +130,17 @@ public class Puzzle {
                 break;
         }
 
-
         if ((nextRow >= 0 && nextRow <= (n - 1)) && (nextColumn >= 0 && nextColumn <= (n - 1))) {
-            if (validMove(p, new Point(nextRow, nextColumn))) {
-                int temp = puzzle_grid[nextRow][nextColumn];
-                puzzle_grid[nextRow][nextColumn] = id;
-                puzzle_grid[p.x][p.y] = temp;
-                toArray();
-
-                if (id == 0) {
-                    pZero.x = nextRow;
-                    pZero.y = nextColumn;
-                }
-
-                return true;
-            } else {
-                return false;
-            }
+        	int temp = puzzle_grid[nextRow][nextColumn];
+            puzzle_grid[nextRow][nextColumn] = 0;
+            puzzle_grid[pZero.x][pZero.y] = temp;
+                
+            puzzle_array[nextRow * n + nextColumn] = 0;
+            puzzle_array[pZero.x * n + pZero.y] = temp;
+               
+            pZero = new Point(nextRow,nextColumn);
+               
+            return true;
         }
         return false;
     }
@@ -151,8 +159,11 @@ public class Puzzle {
             Point index = child.searchIndex(id);
             child.puzzle_grid[child.pZero.x][child.pZero.y] = id;
             child.puzzle_grid[index.x][index.y] = 0;
+            
+            child.puzzle_array[child.pZero.x * n + child.pZero.y] = id;
+            child.puzzle_array[index.x * n + index.y] = 0;
+            
             child.pZero = new Point(index.x, index.y);
-            child.toArray();
             return child;
         }
         return null;
@@ -161,7 +172,7 @@ public class Puzzle {
     /**
      * Possible moves
      *
-     * @return a List of integers, these integers are the blank space neighbors
+     * @return a List of integers, these integers are the blank space neighbors. This list is never empty.
      */
     public List<Integer> validMoves() {
         List<Integer> neighbors = new LinkedList<Integer>();
@@ -190,23 +201,12 @@ public class Puzzle {
     }
 
     /**
-     * Verifies if a desired move is possible
-     *
-     * @param p1 initial position
-     * @param p2 final position
-     * @return true = possible, false = not possible
-     */
-    public boolean validMove(Point p1, Point p2) {
-        return pZero.equals(p1) || pZero.equals(p2);
-    }
-
-    /**
      * Search piece index in the grid.
      *
      * @param id Piece id
      * @return Point(r, c) where r = row, c = column
      */
-    public Point searchIndex(int id) {
+    private Point searchIndex(int id) {
         if (id == 0) {
             return pZero;
         }
@@ -252,25 +252,6 @@ public class Puzzle {
     }
 
     /**
-     * Transforms the grid representation into the array
-     * and writes it in @puzzle_array
-     */
-    public void toArray() {
-        for (int i = 0; i < n; i++)
-            for (int j = 0; j < n; j++)
-                puzzle_array[i * n + j] = puzzle_grid[i][j];
-    }
-
-    /**
-     * Transforms the array representation into the grid
-     * and writes it in @puzzle_grid
-     */
-    public void toGrid() {
-        for (int i = 0; i < (n * n); i++)
-            puzzle_grid[i / n][i % n] = puzzle_array[i];
-    }
-
-    /**
      * Checks whether the puzzle is solvable or no
      * That is done for even-nd-puzzles by calculating number of inversions + the row of the blank tile
      * if odd then it is solvable and vice-versa
@@ -296,7 +277,7 @@ public class Puzzle {
      * Checks whether a passed Puzzle is equal to this puzzle
      *
      * @param obj an instance of Puzzle
-     * @return true if this puzzle is equal to y
+     * @return true if the puzzles are equal
      */
     public boolean equals(Object obj) {
         if (obj == null)
@@ -323,12 +304,12 @@ public class Puzzle {
             newPuzzle.puzzle_array[i] = this.puzzle_array[i];
         }
 
-        newPuzzle.toGrid();
+        for (int i = 0; i < (n * n); i++)
+        	newPuzzle.puzzle_grid[i / n][i % n] = newPuzzle.puzzle_array[i];
+        
         newPuzzle.pZero = this.searchIndex(0);
         return newPuzzle;
     }
-
-
 
     /**
      * Checks on:
@@ -336,6 +317,7 @@ public class Puzzle {
      * <li>The grid and the array are equal</li>
      * <li>The values of tiles are from 0 to size-1</li>
      * <li>The array's length is equal to the grid's length equal to the size of puzzle</li>
+     * <li>The zero coordinate is the current position of the blank space</li>
      * </ul>
      *
      * @return the state of the puzzle
@@ -400,8 +382,9 @@ public class Puzzle {
             Point index = searchIndex(piece);
             puzzle_grid[pZero.x][pZero.y] = piece;
             puzzle_grid[index.x][index.y] = 0;
+            puzzle_array[pZero.x * n + pZero.y] = piece;
+            puzzle_array[index.x * n + index.y] = 0;
             pZero = new Point(index.x, index.y);
-            toArray();
         }
     }
 }
