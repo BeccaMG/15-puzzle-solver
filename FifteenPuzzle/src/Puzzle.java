@@ -94,7 +94,7 @@ public class Puzzle {
      * @param times - number of random movements to shuffle the puzzle
      */
     public void shuffle() {
-    	int times = (int) Math.pow(10, (this.n-1));
+    	int times = (int) Math.pow(10, (this.n)-1);
         Random r = new Random();
         int direction;
         for (int i = 0; i <= times; i++) {

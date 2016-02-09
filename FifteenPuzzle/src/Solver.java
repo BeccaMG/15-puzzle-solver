@@ -2,6 +2,8 @@ import java.util.*;
 import java.lang.reflect.Method;
 
 public class Solver {
+    
+    private final double normalizedStepCost = (1.0/80.0);
 
     /**
      * Represents a node in the A* algorithm (solver) - more details to come...
@@ -49,11 +51,10 @@ public class Solver {
             return (int) Math.signum(this.priority - pn.priority);
         }
     }
-
-    Solver(Puzzle init) {
-        //call ff , solve the whole puzzle, gets next move or whatever
-        // this.puzzle = init;
-    }
+/*
+    Solver(Puzzle puzzle) {
+        this.normalizedStepCost = (1.0/80.0);
+    }*/
 
     //TODO check whether it complies with hamming's the real algo
 
@@ -102,8 +103,8 @@ public class Solver {
                 distance += rows + columns;
             }
         }
-        return (distance / Math.pow(n, 3));
-//         return (distance / 58.0);
+//         return (distance / Math.pow(n, 3));
+        return (distance / 58.0);
 //         return 1 - distance / Math.pow(n, 3);
 //         return distance;
     }
@@ -111,7 +112,7 @@ public class Solver {
 
     /**
      * aStar
-     * <p>
+     *
      * A* Algorithm
      *
      * @param puzzle          The puzzle to solve
@@ -179,12 +180,11 @@ public class Solver {
                         result = (double) fitnessFunction.invoke(this, neighbor);
                         
                         newMoves = currentPuzzleNode.getMovesDoneSoFar() + 1;
-                        newPriority = result + ((newMoves * 1.0) / 80.0);
-//                         newPriority = result + newMoves;
+                        newPriority = result + normalizedStepCost;
+                        
                         newPuzzleNode = new PuzzleNode(
                             neighbor, currentPuzzle, newPriority, newMoves
                         );
-                            
                         newPuzzleNode.addStepToList(
                             currentPuzzleNode.getListOfSteps(), tile);
 
@@ -221,16 +221,17 @@ public class Solver {
         
     }
         
-        
     public double search(Puzzle puzzle, double cost, double bound, Method fitnessFunction) {
     
         try {
             
             double f = cost + (double) fitnessFunction.invoke(this, puzzle);
-            if (f > bound)
+            if (f > bound) {
                 return f;
-            if (puzzle.isSolved())
+            }
+            if (puzzle.isSolved()) {
                 return -1.0;
+            }
             
             double min = Double.POSITIVE_INFINITY;
             
@@ -240,15 +241,16 @@ public class Solver {
                 
             for (Integer tile : validMoves) {
                 neighbor = puzzle.movePiece(tile);
-                double t = search(neighbor, cost + (1.0/80.0), bound, fitnessFunction);
-                if (t == -1.0)
+                double t = search(neighbor, cost + normalizedStepCost, bound, fitnessFunction);
+                if (t == -1.0) {
                     return -1.0;
-                if (t < min)
+                }
+                if (t < min) {
                     min = t;
+                }
             }
             
             return min;
-                
             
         } catch (Exception e) {
             e.printStackTrace();
@@ -258,9 +260,9 @@ public class Solver {
     }
         
     /**
-     * aStar
-     * <p>
-     * A* Algorithm
+     * idaStar
+     * 
+     * IDA* Algorithm
      *
      * @param puzzle          The puzzle to solve
      * @param fitnessFunction Fitness function used to compute the priority of
@@ -288,20 +290,21 @@ public class Solver {
 
             while (true) {
                 
-                double t = search(puzzle, 0, bound, fitnessFunction);
+                double t = search(puzzle, 0.0, bound, fitnessFunction);
                 if (t == -1.0) {
-                    end = System.currentTimeMillis();
-                    System.out.println("Time: " + (end-start)/1000 + " seconds");
+//                     end = System.currentTimeMillis();
+//                     System.out.println("Time: " + (end-start)/1000 + " seconds");
                     return -1.0; //FOUND
                 }
                 if (t == Double.POSITIVE_INFINITY) {
-                    end = System.currentTimeMillis();
-                    System.out.println("Time: " + (end-start)/1000 + " seconds");
+//                     end = System.currentTimeMillis();
+//                     System.out.println("Time: " + (end-start)/1000 + " seconds");
+                    System.out.println("Does this ever happen?");
                     return-2.0; //NOT_FOUND
                 }
                 if (t == -3.0) {
-                    end = System.currentTimeMillis();
-                    System.out.println("Time: " + (end-start)/1000 + " seconds");
+//                     end = System.currentTimeMillis();
+//                     System.out.println("Time: " + (end-start)/1000 + " seconds");
                     return -3.0; //EXCEPTION
                 }
                 bound = t;
