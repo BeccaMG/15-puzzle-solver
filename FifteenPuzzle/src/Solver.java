@@ -103,8 +103,9 @@ public class Solver {
                 distance += rows + columns;
             }
         }
-        //return 1 - distance / Math.pow(n, 3);
-        return distance;
+        return (distance / Math.pow(n, 3));
+//         return 1 - distance / Math.pow(n, 3);
+//         return distance;
     }
 
 
@@ -153,6 +154,7 @@ public class Solver {
             Puzzle neighbor;
             PuzzleNode newPuzzleNode;
             double newPriority = 0;
+//             int newMoves;
             int newMoves;
 
             System.out.println("START Puzzle in aStar with " + result + "\n" + currentPuzzle.toString());
@@ -176,8 +178,8 @@ public class Solver {
                         result = (double) fitnessFunction.invoke(this, neighbor);
                         // TEST
                         newMoves = currentPuzzleNode.getMovesDoneSoFar() + 1;
-//                         newPriority = result - (newMoves/87);
-                        newPriority = result + newMoves;
+                        newPriority = result + ((newMoves * 1.0) / 80.0);
+//                         newPriority = result + newMoves;
                         newPuzzleNode = new PuzzleNode(
                                             neighbor,
                                             currentPuzzle,
@@ -214,4 +216,87 @@ public class Solver {
         }
 
     }
+        
+        
+    public double search(Puzzle puzzle, double cost, double bound, Method fitnessFunction) {
+    
+        try {
+            
+            double f = cost + (double) fitnessFunction.invoke(this, puzzle);
+            if (f > bound)
+                return f;
+            if (puzzle.isSolved())
+                return -1.0;
+            
+            double min = Double.POSITIVE_INFINITY;
+            
+            List<Integer> validMoves = new ArrayList<Integer>();
+            Puzzle neighbor;
+            validMoves = puzzle.validMoves();
+                
+            for (Integer tile : validMoves) {
+                neighbor = puzzle.movePiece(tile);
+                double t = search(neighbor, cost + 1.0, bound, fitnessFunction);
+                if (t == -1.0)
+                    return -1.0;
+                if (t < min)
+                    min = t;
+            }
+            
+            return min;
+                
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -3.0;
+        }
+    
+    }
+        
+    /**
+     * aStar
+     * <p>
+     * A* Algorithm
+     *
+     * @param puzzle          The puzzle to solve
+     * @param fitnessFunction Fitness function used to compute the priority of
+     *                        nodes (states of the puzzle).
+     * @return The ordered list of steps to follow for solving the puzzle, in
+     * the form of Integer meaning which tile to move (swap with the
+     * blank space).
+     * @see <a href="https://en.wikipedia.org/wiki/A*_search_algorithm">A* Search Algorithm</a>
+     * @see <a href="http://www.cs.princeton.edu/courses/archive/spr10/cos226/assignments/8puzzle.html">The 8-Puzzle</a>
+     */
+    public double idaStar(Puzzle puzzle, Method fitnessFunction) {
+
+        long start = System.currentTimeMillis();
+        // If the puzzle is not solvable, return null. (Or might throw an exception depending of our implementation)
+        if (!puzzle.isSolvable())
+            return -2.0;
+
+        try { // Execute the fitnessFunction
+
+            double bound = (double) fitnessFunction.invoke(this, puzzle);  // REFLECTION NOT COMPLETELY WELL USED
+
+            while (true) {
+                
+                double t = search(puzzle, 0, bound, fitnessFunction);
+                if (t == -1.0)
+                    return -1.0; //FOUND
+                if (t == Double.POSITIVE_INFINITY)
+                    return -2.0; //NOT_FOUND
+                if (t == -3.0)
+                    return -3.0; //EXCEPTION
+                bound = t;
+        
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -3.0;
+        }
+
+    }
+        
+    
 }
