@@ -10,6 +10,7 @@ public class Main {
 		//1 = up, 2 = down, 3 = right, 4 left
 // 		System.out.println(p.toString());
 // 		System.out.println("Displayed puzzle solved? (should be true)... "+p.isSolved());
+
 		p.shuffle();
 // 		System.out.println("Shuffled  puzzle solved? (should be false)... "+p.isSolved()+"\n");
 // 		System.out.println(Arrays.toString(p.puzzle_array));
@@ -76,27 +77,41 @@ public class Main {
 //         
 //         
         
-		System.out.println("\n\n************ START  Test aStar() ************");
-// 		System.out.print("Puzzle\n"+p.toString());
-		
-		Class[] argTypes = new Class[] { Puzzle.class };
-		
-		try {
+        System.out.println("\n\n************ START  Test aStar() ************");
+//      System.out.print("Puzzle\n"+p.toString());
+        
+        Class[] argTypes = new Class[] { Puzzle.class };
+        
+        try {
             Method m = (Solver.class).getDeclaredMethod("manhattanDistance", argTypes);
             List<Integer> list = s.aStar(p, m);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        
+        System.out.println("************ FINISH Test aStar() ************");
+        
+        
+		System.out.println("\n\n************ START  Test idaStar() ************");
+// 		System.out.print("Puzzle\n"+p.toString());
 		
-		System.out.println("************ FINISH Test aStar() ************");
+		try {
+            Method m = (Solver.class).getDeclaredMethod("manhattanDistance", argTypes);
+            double d = s.idaStar(p, m);
+            System.out.println(d);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 		
-		System.out.println("\n\n************ START   Test followMovements() ************");
-		Puzzle pshuffled = new Puzzle(new int []{1,2,4,8,0,5,3,13,10,6,14,7,9,11,15,12});
-		System.out.println("Shuffled:\n"+pshuffled.toString());
-		List<Integer> mList = new ArrayList<Integer>();
-		Collections.addAll(mList,5,6,14,7,13,8,4,3,7,13,12,15,11,14,13,11,14,13,10,9,13,14,15);
-		pshuffled.followMovements(mList);
-		System.out.println("Solved:\n"+pshuffled.toString());
-		System.out.println("\n\n************ FINISH  Test followMovements() ************");
+		System.out.println("************ FINISH Test idaStar() ************");
+		
+// 		System.out.println("\n\n************ START   Test followMovements() ************");
+// 		Puzzle pshuffled = new Puzzle(new int []{1,2,4,8,0,5,3,13,10,6,14,7,9,11,15,12});
+// 		System.out.println("Shuffled:\n"+pshuffled.toString());
+// 		List<Integer> mList = new ArrayList<Integer>();
+// 		Collections.addAll(mList,5,6,14,7,13,8,4,3,7,13,12,15,11,14,13,11,14,13,10,9,13,14,15);
+// 		pshuffled.followMovements(mList);
+// 		System.out.println("Solved:\n"+pshuffled.toString());
+// 		System.out.println("\n\n************ FINISH  Test followMovements() ************");
 	}
 }
