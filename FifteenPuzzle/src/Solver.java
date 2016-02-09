@@ -282,7 +282,7 @@ public class Solver {
         long start;
         long end;
         
-        long start = System.currentTimeMillis();
+//         long start = System.currentTimeMillis();
         double returnValue;
     
         try { // Execute the fitnessFunction
