@@ -92,13 +92,13 @@ public class Main {
 		
 		System.out.println("************ FINISH Test aStar() ************");
 		
-		System.out.println("\n\n************ START   Test followMovements() ************");
-		Puzzle pshuffled = new Puzzle(new int []{1,2,4,8,0,5,3,13,10,6,14,7,9,11,15,12});
-		System.out.println("Shuffled:\n"+pshuffled.toString());
-		List<Integer> mList = new ArrayList<Integer>();
-		Collections.addAll(mList,5,6,14,7,13,8,4,3,7,13,12,15,11,14,13,11,14,13,10,9,13,14,15);
-		pshuffled.followMovements(mList);
-		System.out.println("Solved:\n"+pshuffled.toString());
-		System.out.println("\n\n************ FINISH  Test followMovements() ************");
+// 		System.out.println("\n\n************ START   Test followMovements() ************");
+// 		Puzzle pshuffled = new Puzzle(new int []{1,2,4,8,0,5,3,13,10,6,14,7,9,11,15,12});
+// 		System.out.println("Shuffled:\n"+pshuffled.toString());
+// 		List<Integer> mList = new ArrayList<Integer>();
+// 		Collections.addAll(mList,5,6,14,7,13,8,4,3,7,13,12,15,11,14,13,11,14,13,10,9,13,14,15);
+// 		pshuffled.followMovements(mList);
+// 		System.out.println("Solved:\n"+pshuffled.toString());
+// 		System.out.println("\n\n************ FINISH  Test followMovements() ************");
 	}
 }
