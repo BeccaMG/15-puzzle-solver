@@ -5,5 +5,4 @@ if [ "$1" == "-d" ] ; then
 sudo nohup java -cp "jars/*:bin"  Publisher &
 else
 sudo java -cp "jars/*:bin"  Publisher
-if [ $? -eq 0 ] ; then echo "Service running in the background" ; fi
 fi
