@@ -29,49 +29,22 @@ public class PuzzleWS {
     @Path("/isSolvable")
     @Produces("application/json")
     public boolean isSolvable(@QueryParam("puzzle") String puzzle) {
-        String puzzleString[]  = puzzle.replaceAll("\\[", "").replaceAll("\\]", "").replaceAll(" ", "") .split(","); 
-        int puzzleSeed[] = new int[puzzleString.length];
-        for (int i = 0; i < puzzleString.length; i++){
-            try {
-            puzzleSeed[i] = Integer.parseInt(puzzleString[i]);
-            } catch (NumberFormatException nfe) {
-                return false;
-            }
-        }
-        Puzzle npuzzle;
-        try {
-        npuzzle = new Puzzle(puzzleSeed);
-        } catch (ArrayIndexOutOfBoundsException nfe) {
-            return false;        
-            }
-        return npuzzle.isSolvable();
+        return stringToPuzzle(puzzle).isSolvable();
     }
     
     @GET
     @Path("/solve")
     @Produces("application/json")
     public List<Integer> add(@QueryParam("puzzle") String puzzle) {
-    	List<Integer> list = null;
-    	String puzzleString[]  = puzzle.replaceAll("\\[", "").replaceAll("\\]", "").replaceAll(" ", "") .split(","); 
-        int puzzleSeed[] = new int[puzzleString.length];
-        for (int i = 0; i < puzzleString.length; i++){
-            try {
-            puzzleSeed[i] = Integer.parseInt(puzzleString[i]);
-            } catch (NumberFormatException nfe) {
-                return list;
-            }
-        }
-        Puzzle npuzzle;
+    	List<Integer> list = null;    	
+        Puzzle npuzzle = stringToPuzzle(puzzle);
         Solver s;
         try {
-        npuzzle = new Puzzle(puzzleSeed);
-        s = new Solver(npuzzle);
+        	s = new Solver(npuzzle);
         } catch (ArrayIndexOutOfBoundsException nfe) {
             return list;        
             }
-        
-    	Class[] argTypes = new Class[] { Puzzle.class };
-		
+    	Class[] argTypes = new Class[] { Puzzle.class };		
 		try {
             Method m = (Solver.class).getDeclaredMethod("manhattanDistance", argTypes);
             list = s.aStar(npuzzle, m);
@@ -89,6 +62,25 @@ public class PuzzleWS {
      File file = new File("resources/interface.html");
 
      return file;
+    }
+    
+    public Puzzle stringToPuzzle(String puzzleStr) {
+    	Puzzle npuzzle = null;
+    	String puzzleString[]  = puzzleStr.replaceAll("\\[", "").replaceAll("\\]", "").replaceAll(" ", "") .split(",");
+    	int puzzleSeed[] = new int[puzzleString.length];
+    	for (int i = 0; i < puzzleString.length; i++){
+            try {
+            puzzleSeed[i] = Integer.parseInt(puzzleString[i]);
+            } catch (NumberFormatException nfe) {
+                return npuzzle;
+            }
+        }
+    	try {
+    	npuzzle = new Puzzle(puzzleSeed);
+    	} catch (ArrayIndexOutOfBoundsException nfe) {
+            return npuzzle;        
+            }
+    	return npuzzle;
     }
 
 
