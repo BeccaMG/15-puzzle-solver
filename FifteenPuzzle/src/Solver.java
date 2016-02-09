@@ -1,6 +1,5 @@
 import java.util.*;
 import java.lang.reflect.Method;
-import java.lang.Math.*;
 
 public class Solver {
 
@@ -56,7 +55,8 @@ public class Solver {
         // this.puzzle = init;
     }
 
-    //TODO check whether it complies with hamming's real algo
+    //TODO check whether it complies with hamming's the real algo
+
     /**
      * Hamming Distance checks the number of tiles out of place
      * for each piece in place the degree adds 1/size
@@ -65,12 +65,12 @@ public class Solver {
      * @return The degree of the passed puzzle
      */
     public double hammingDistance(Puzzle puzzle) {
-        float degree = 0;
+        float degree = 1;
         int size = puzzle.getSize();
         float weight = 1 / (float) size;
         for (int i = 0; i < size; i++)
-            if (puzzle.puzzle_array[i] != (i + 1) % size)
-                degree += weight;
+            if (puzzle.toArray()[i] != (i + 1) % size)
+                degree -= weight;
 
         //Use this as a return to return a rounded float to the nearest hundredth
         //return (float) Math.round(degree*100)/100;
@@ -79,6 +79,7 @@ public class Solver {
 
 
     //TODO get the value of the most mixed up puzzle to return the 1- distance/value
+
     /**
      * Manhattan Distance
      * compute the degree by calculating the distance between each tile and it's place
@@ -93,11 +94,11 @@ public class Solver {
 //        int [] test_array = {0,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1};
 //        int [] test_array = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,0};
         for (int i = 0; i < size; i++) {
-            if (puzzle.puzzle_array[i] != 0) {
+            if (puzzle.toArray()[i] != 0) {
                 //difference in rows between current place and the correct one
-                rows = Math.abs(i/n - (puzzle.puzzle_array[i] - 1)/n);
+                rows = Math.abs(i/n - (puzzle.toArray()[i] - 1)/n);
                 //difference in columns between current place and the correct one
-                columns = Math.abs(i%n - (puzzle.puzzle_array[i] - 1)%n);
+                columns = Math.abs(i%n - (puzzle.toArray()[i] - 1)%n);
                 distance += rows + columns;
             }
         }
