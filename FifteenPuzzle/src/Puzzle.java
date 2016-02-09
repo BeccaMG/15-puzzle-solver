@@ -1,4 +1,5 @@
 import java.awt.Point;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -375,5 +376,21 @@ public class Puzzle {
 	 */
 	public boolean isSolved(){
 		return this.equals(new Puzzle(this.n));
+	}
+	
+	/**
+	 * Follow the list of movements specified in the parameter
+	 * @param l - Integer list with the sequence of pieces to be moved
+	 */
+	public void followMovements(List<Integer> l){
+		Iterator<Integer> iterator = l.iterator();
+ 		while (iterator.hasNext()) {
+		    Integer piece = iterator.next();
+		    Point index = searchIndex(piece);
+			puzzle_grid[pZero.x][pZero.y] = piece;
+			puzzle_grid[index.x][index.y] = 0;
+			pZero = new Point(index.x,index.y);
+			toArray();		
+ 		}
 	}
 }
