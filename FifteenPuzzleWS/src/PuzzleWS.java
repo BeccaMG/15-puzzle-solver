@@ -2,13 +2,8 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 
-import java.util.Arrays;
 import java.util.List;
-import java.awt.Point;
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.lang.reflect.Method;
 import java.io.File;
 
