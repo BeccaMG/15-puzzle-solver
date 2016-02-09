@@ -14,7 +14,7 @@ public class Puzzle {
     /**
      * nxn Matrix. Game elements [0,(n*n)-1], 0 is the blank space. The puzzle generated would be solved.
      * 	
-     * @param n - the dimension of the matrix
+     * @param n - the dimension of the matrix. It doesn't make sense to enter n = 1.
      */
     public Puzzle(int n) {
         this.n = n;
@@ -72,13 +72,15 @@ public class Puzzle {
     }
 
     /**
-     * Shuffles the puzzle making 10^(n-1) random movements.
+     * Shuffles the puzzle making random movements. The number of random movements are in the range of [10^(n-2),10^(n-1)].
      *
      * @param times - number of random movements to shuffle the puzzle
      */
     public void shuffle() {
-    	int times = (int) Math.pow(10, (this.n)-1);
         Random r = new Random();
+        int upperLimit = (int) Math.pow(10, n-1);
+        int lowerLimit = (int) Math.pow(10, n-2);
+        int times = r.nextInt(upperLimit)+lowerLimit;
         int direction;
         for (int i = 0; i <= times; i++) {
             direction = r.nextInt(4) + 1;
