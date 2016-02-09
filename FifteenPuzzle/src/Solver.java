@@ -102,9 +102,10 @@ public class Solver {
                 distance += rows + columns;
             }
         }
-//         return (distance / Math.pow(n, 3));
+        return (distance / Math.pow(n, 3));
+//         return (distance / 58.0);
 //         return 1 - distance / Math.pow(n, 3);
-        return distance;
+//         return distance;
     }
 
 
@@ -124,21 +125,26 @@ public class Solver {
      */
     public List<Integer> aStar(Puzzle puzzle, Method fitnessFunction) {
 
-        long start = System.currentTimeMillis();
-        // If the puzzle is not solvable, return null. (Or might throw an exception depending of our implementation)
+        // If the puzzle is not solvable, return null.
         if (!puzzle.isSolvable())
             return null;
 
+        PriorityQueue<PuzzleNode> pqueue = new PriorityQueue();        
         List<Integer> maxs;
         int maxn = 0;
+        long start;
+        long end;
 
-        PriorityQueue<PuzzleNode> pqueue = new PriorityQueue<PuzzleNode>();
+                    
+        // Execute the fitnessFunction
+        try {
+            
+            start = System.currentTimeMillis();
 
-        try { // Execute the fitnessFunction
+            
+/* -------------------------- START COUNTING TIME --------------------------- */            
 
-            double result = (double) fitnessFunction.invoke(this, puzzle);  // REFLECTION NOT COMPLETELY WELL USED
-
-//             System.out.println(result); // First result
+            double result = (double) fitnessFunction.invoke(this, puzzle);
 
             // Enqueue the initial state of the board (passed as parameter)
             // with its priority computed and 0 moves done so far.
@@ -147,73 +153,72 @@ public class Solver {
             );
 
             PuzzleNode currentPuzzleNode = pqueue.poll();
-
-            List<Integer> validMoves = new ArrayList<Integer>();
             Puzzle currentPuzzle = currentPuzzleNode.getCurrentState();
+            System.out.println("START Puzzle in aStar with " + 
+                               result + "\n" + currentPuzzle.toString());
+
+            List<Integer> validMoves;
             Puzzle neighbor;
             PuzzleNode newPuzzleNode;
-            double newPriority = 0;
-//             int newMoves;
+            double newPriority;
             int newMoves;
+            
 
-            System.out.println("START Puzzle in aStar with " + result + "\n" + currentPuzzle.toString());
-//             int i = 0;
             while (!currentPuzzle.isSolved()) {
-//                     !pqueue.isEmpty()) {
-//             for (int i = 0; i < 100; i++) {
-//                 System.out.println(i+"-Puzzle in aStar with " +
-//                 currentPuzzleNode.priority + "\n" + currentPuzzle.toString());
 
                 validMoves = currentPuzzle.validMoves();
 
                 for (Integer tile : validMoves) {
-//                     System.out.println("Valid move: " + tile);
                     // This will give me a board with the moved piece
                     neighbor = currentPuzzle.movePiece(tile);
 //                     System.out.println("neighbor\n" + neighbor.toString());
 
-                    // Optimization to not enqueue when I already used that board
-                    if (!neighbor.equals(currentPuzzleNode.getPreviousState())) {
+                    // Optimization to not enqueue when I already had that board
+                    if (!neighbor.equals(currentPuzzleNode.getPreviousState())){
+
                         result = (double) fitnessFunction.invoke(this, neighbor);
-                        // TEST
+                        
                         newMoves = currentPuzzleNode.getMovesDoneSoFar() + 1;
-//                         newPriority = result + ((newMoves * 1.0) / 80.0);
-                        newPriority = result + newMoves;
+                        newPriority = result + ((newMoves * 1.0) / 80.0);
+//                         newPriority = result + newMoves;
                         newPuzzleNode = new PuzzleNode(
-                                            neighbor,
-                                            currentPuzzle,
-                                            newPriority, // Think about adding the moves done...
-                                            newMoves
-                                        );
-                        newPuzzleNode.addStepToList(currentPuzzleNode.getListOfSteps(), tile);
+                            neighbor, currentPuzzle, newPriority, newMoves
+                        );
+                            
+                        newPuzzleNode.addStepToList(
+                            currentPuzzleNode.getListOfSteps(), tile);
 
                         pqueue.add(newPuzzleNode);
+                        
+                        if (newPuzzleNode.getListOfSteps().size() > maxn) {
+                            maxs = newPuzzleNode.getListOfSteps();
+                            maxn = maxs.size();
+                        }
                     }
-
-//                     i++;
                 }
 
-                if (currentPuzzleNode.getListOfSteps().size() > maxn) {
-                    maxs = currentPuzzleNode.getListOfSteps();
-                    maxn = maxs.size();
-                }
                 currentPuzzleNode = pqueue.poll();
                 currentPuzzle = currentPuzzleNode.getCurrentState();
 
             }
-//
-            // Supposed to find the solution
+                        
+/* --------------------------- STOP COUNTING TIME --------------------------- */            
+                        
+            end = System.currentTimeMillis();
+            
             System.out.println("SOLVED Puzzle in aStar\n" + currentPuzzle.toString());
             System.out.println("Solution in " + currentPuzzleNode.getListOfSteps().size() + " steps:\n" + currentPuzzleNode.getListOfSteps());
-            long end = System.currentTimeMillis();
             System.out.println("Time: " + (end-start)/1000 + " seconds");
-//             System.out.println("Maxn: " + maxn);
-             return currentPuzzleNode.getListOfSteps();
+            System.out.println("Maxn: " + maxn);
+            System.out.println("Pqueue: " + pqueue.size());
+        
+            return currentPuzzleNode.getListOfSteps();
+        
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
-
+        
     }
         
         
@@ -235,7 +240,7 @@ public class Solver {
                 
             for (Integer tile : validMoves) {
                 neighbor = puzzle.movePiece(tile);
-                double t = search(neighbor, cost + 1.0, bound, fitnessFunction);
+                double t = search(neighbor, cost + (1.0/80.0), bound, fitnessFunction);
                 if (t == -1.0)
                     return -1.0;
                 if (t < min)
@@ -308,6 +313,5 @@ public class Solver {
         }
 
     }
-        
-    
+
 }

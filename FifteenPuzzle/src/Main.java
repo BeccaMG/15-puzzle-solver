@@ -92,18 +92,18 @@ public class Main {
         System.out.println("************ FINISH Test aStar() ************");
         
         
-		System.out.println("\n\n************ START  Test idaStar() ************");
-// 		System.out.print("Puzzle\n"+p.toString());
-		
-		try {
-            Method m = (Solver.class).getDeclaredMethod("manhattanDistance", argTypes);
-            double d = s.idaStar(p, m);
-            System.out.println(d);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-		
-		System.out.println("************ FINISH Test idaStar() ************");
+// 		System.out.println("\n\n************ START  Test idaStar() ************");
+// // 		System.out.print("Puzzle\n"+p.toString());
+// 		
+// // 		try {
+// // //             Method m = (Solver.class).getDeclaredMethod("manhattanDistance", argTypes);
+// // //             double d = s.idaStar(p, m);
+// //             System.out.println(d);
+// //         } catch (Exception e) {
+// //             e.printStackTrace();
+// //         }
+// 		
+// 		System.out.println("************ FINISH Test idaStar() ************");
 		
 // 		System.out.println("\n\n************ START   Test followMovements() ************");
 // 		Puzzle pshuffled = new Puzzle(new int []{1,2,4,8,0,5,3,13,10,6,14,7,9,11,15,12});
