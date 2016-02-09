@@ -101,9 +101,9 @@ public class Solver {
                 distance += rows + columns;
             }
         }
-        return (distance / Math.pow(n, 3));
+//         return (distance / Math.pow(n, 3));
 //         return 1 - distance / Math.pow(n, 3);
-//         return distance;
+        return distance;
     }
 
 
@@ -176,8 +176,8 @@ public class Solver {
                         result = (double) fitnessFunction.invoke(this, neighbor);
                         // TEST
                         newMoves = currentPuzzleNode.getMovesDoneSoFar() + 1;
-                        newPriority = result + ((newMoves * 1.0) / 80.0);
-//                         newPriority = result + newMoves;
+//                         newPriority = result + ((newMoves * 1.0) / 80.0);
+                        newPriority = result + newMoves;
                         newPuzzleNode = new PuzzleNode(
                                             neighbor,
                                             currentPuzzle,
@@ -271,22 +271,34 @@ public class Solver {
         // If the puzzle is not solvable, return null. (Or might throw an exception depending of our implementation)
         if (!puzzle.isSolvable())
             return -2.0;
-
+    
+        double returnValue;
+    
         try { // Execute the fitnessFunction
 
             double bound = (double) fitnessFunction.invoke(this, puzzle);  // REFLECTION NOT COMPLETELY WELL USED
+            long end;
+            System.out.println("START Puzzle in idaStar with " + bound + "\n" + puzzle.toString());
 
             while (true) {
                 
                 double t = search(puzzle, 0, bound, fitnessFunction);
-                if (t == -1.0)
+                if (t == -1.0) {
+                    end = System.currentTimeMillis();
+                    System.out.println("Time: " + (end-start)/1000 + " seconds");
                     return -1.0; //FOUND
-                if (t == Double.POSITIVE_INFINITY)
-                    return -2.0; //NOT_FOUND
-                if (t == -3.0)
+                }
+                if (t == Double.POSITIVE_INFINITY) {
+                    end = System.currentTimeMillis();
+                    System.out.println("Time: " + (end-start)/1000 + " seconds");
+                    return-2.0; //NOT_FOUND
+                }
+                if (t == -3.0) {
+                    end = System.currentTimeMillis();
+                    System.out.println("Time: " + (end-start)/1000 + " seconds");
                     return -3.0; //EXCEPTION
+                }
                 bound = t;
-        
             }
             
         } catch (Exception e) {
