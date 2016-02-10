@@ -60,7 +60,11 @@ public class Puzzle {
      * @return the size of the puzzle (total tiles, including the blank space)
      */
     public int getSize() {
-        return n * n;
+        return (n*n)-1;
+    }
+    
+    public int getDimension() {
+        return n;
     }
     
     /**
