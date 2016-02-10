@@ -6,18 +6,30 @@ public class Solver {
 //     private final double normalizedStepCost = (1.0/80.0);
     private final double normalizedStepCost = (1.0);
 
+
     /**
-     * Represents a node in the A* algorithm (solver) - more details to come...
+     * Represents a node in the solver algorithm.
      *
-     * @see <a href="http://www.cs.princeton.edu/courses/archive/spr10/cos226/assignments/8puzzle.html">The 8-Puzzle</a>
+     * @see aStar(Puzzle puzzle, Method fitnessFunction)
+     * @see idaStar(Puzzle puzzle, Method fitnessFunction)
      */
     private class PuzzleNode implements Comparable<PuzzleNode> {
         private Puzzle currentState;
-        private Puzzle previousState; // To don't enqueue the previous state
-        private double priority; // Priority = number of moves + fitness function
+        private Puzzle previousState; 
+        private double priority;
         private double movesDoneSoFar;
-        private List<Integer> listOfSteps; // To keep a track of movements
+        private List<Integer> listOfSteps;
 
+        /**
+         * PuzzleNode constructor.
+         *
+         * It creates a node in the tree of the solver algorithm.
+         *  
+         * @param current Puzzle with the current board.
+         * @param previous Puzzle with the previous board or parent.
+         * @param priority priority = fitnessFunction(node) + moves(node).
+         * @param moves Cost from the root to the current node.
+         */
         public PuzzleNode(Puzzle current, Puzzle previous, double priority, double moves) {
             this.currentState = current;
             this.previousState = previous;
@@ -26,37 +38,76 @@ public class Solver {
             this.listOfSteps = new ArrayList<Integer>();
         }
 
+        /**
+         * Returns the puzzle board of this node.
+         *
+         * @return The puzzle board corresponding to the node.
+         */
         public Puzzle getCurrentState() {
             return this.currentState;
         }
-
+        
+        /**
+         * Returns the puzzle board of the parent node.
+         *
+         * @return The puzzle board corresponding to the parent node in the tree.
+         */
         public Puzzle getPreviousState() {
             return this.previousState;
         }
 
+        /**
+         * Returns the moves done to get to this node.
+         *
+         * @return The cost of moving from the root to the current node.
+         */
         public double getMovesDoneSoFar() {
             return this.movesDoneSoFar;
         }
         
+        /**
+         * Returns the priority of this node.
+         *
+         * @return The priority of this node given by 
+         *         number of moves + fitness function
+         */        
         public double getPriority() {
             return this.priority;
         }
 
+        /**
+         * Returns the list of movements done from the root to this node.
+         *
+         * @return The list of tiles moved in the root board to get to this board.
+         */  
         public List<Integer> getListOfSteps() {
             return this.listOfSteps;
         }
 
+        /**
+         * Adds a step on the list of movements.
+         *
+         * @return Adds a movement of a tile to this list of steps.
+         */  
         public void addStepToList(List<Integer> list, Integer step) {
             this.listOfSteps.addAll(list);
             this.listOfSteps.add(step);
         }
 
+        /**
+         * Compares two PuzzleNodes.
+         *
+         * @return -1 is this node has a lower priority than the node passed as
+         *         a parameter. 0 is equals, 1 if greater.
+         */  
         @Override
         public int compareTo(PuzzleNode pn) {
             return (int) Math.signum(this.priority - pn.priority);
         }
     }
 
+
+/* --------------------------- FITNESS FUNCTIONS -----------------------------*/
 
     /**
      * The Hamming distance computes the number of tiles out of place.
@@ -75,7 +126,7 @@ public class Solver {
         int size = puzzle.getSize();
         int[] array = puzzle.toArray();
         
-        for (int i = 0; i <= size; i++)
+        for (int i = 0; i < size; i++)
             if ((array[i] != (i + 1)) && (array[i] != 0))
                 misplacedTiles++;
 
@@ -84,7 +135,6 @@ public class Solver {
     }
 
 
-    // TODO get the value of the most mixed up puzzle to return the distance/value
     /**
      * The Manhattan distance computes the total <i>"square distance"</i> between 
      * each tile and its correct place.
@@ -105,7 +155,7 @@ public class Solver {
         int rows, columns;
         int[] array = puzzle.toArray();
 
-        for (int i = 0; i <= size; i++) {
+        for (int i = 0; i < size; i++) {
             if (array[i] != 0) {
                 //difference in rows between current place and the correct one
                 rows = Math.abs(i/n - (array[i] - 1)/n);
@@ -122,6 +172,35 @@ public class Solver {
 
 
     /**
+     * The Geometric Series of sum(2^-n).
+     *
+     * This fitness function adds the term 2^-<i>i</i> if the tile <i>i</i> is in its
+     * place on the current board. Then returns the 1 minus the sum of all terms
+     * of tiles in the right place. Proposed by J. Paul Gibson.
+     *
+     * @see <a href="https://goo.gl/3P0uPB">Wolfram-Alpha geometric series</a>
+     *
+     * @param puzzle The puzzle of which the fitness value will be computed
+     * @return A number between 0 and 1, representing the estimated cost to 
+     *         reach the solved puzzle (normalized).
+     */     
+    public double geometricSeries(Puzzle puzzle) {        
+        double sum = 1;
+        int size = puzzle.getSize();
+        int[] array = puzzle.toArray();
+        
+        for (int i = 0; i < size; i++)
+            if ((array[i] == (i + 1)) && (array[i] != 0)) {
+                sum -= Math.pow(2, -(i+1));
+            }
+        
+        return sum;
+    }
+            
+    
+/* ---------------------------- SOLVING ALGORITHMS ---------------------------*/
+
+    /**
      * A* Search Algorithm.
      *
      * As a search algorithm, it starts from the initial board computing the
@@ -129,7 +208,7 @@ public class Solver {
      * queue, creates a tree and explores the more promising branches. Known
      * for being extremely memory-overhead.
      *
-     * It outputs the time and sequence of moves found.
+     * It outputs the elapsed time and sequence of moves found to solve the puzzle.
      *
      * @param puzzle The puzzle to solve
      * @param fitnessFunction Fitness function used to compute the priority of
@@ -169,7 +248,7 @@ public class Solver {
 
             PuzzleNode currentPuzzleNode = pqueue.poll();
             Puzzle currentPuzzle = currentPuzzleNode.getCurrentState();
-            System.out.println("Initial puzzle in aStar with fitness of " + 
+            System.out.println("Initial puzzle in aStar with " + fitnessFunction.getName() + " of " + 
                                result + "\n" + currentPuzzle.toString());
 
             List<Integer> validMoves;
@@ -234,7 +313,6 @@ public class Solver {
         
     }
         
-
         
     /**
      * IDA* Algorithm.
@@ -243,7 +321,7 @@ public class Solver {
      * sacrificing performance. It explores every branch of the tree and cuts it
      * when reaching a threshold.
      *
-     * It outputs the time and sequence of moves found.
+     * It outputs the elapsed time and sequence of moves found to solve the puzzle.
      *
      * @param puzzle The puzzle to solve
      * @param fitnessFunction Fitness function used to compute the priority of
@@ -272,9 +350,10 @@ public class Solver {
 /* -------------------------- START COUNTING TIME --------------------------- */
 
             double threshold = (double) fitnessFunction.invoke(this, puzzle);
+            
             PuzzleNode root = new PuzzleNode(puzzle, null, threshold, 0.0);
             
-            System.out.println("Initial puzzle in idaStar with fitness of " 
+            System.out.println("Initial puzzle in idaStar with " + fitnessFunction.getName() + " of " 
                             + threshold + "\n" + puzzle.toString());
 
             while (deepSearch != -1.0) { // While not found in the children
@@ -300,7 +379,21 @@ public class Solver {
 
     }
     
-    
+    /**
+     * Deep First Search.
+     *
+     * It explores recursively the branch of the PuzzleNode in parameter as the
+     * root. It cuts off the recursion when the priority of a node is higher
+     * than a threshold. Throws an exception if the fitnessFunction can't be
+     * invoked.
+     *
+     * @param pn The root node of the branch.
+     * @param threshold The given bound.
+     * @param fitnessFunction Fitness function used to compute the priority of
+     *                        nodes (states of the puzzle).
+     * @return The priority higher than a threshold if found or -1 if the solved
+     *         puzzle is reached.
+     */    
     private double dfs(PuzzleNode pn, double threshold, Method fitnessFunction) throws Exception {
     
         Puzzle currentPuzzle = pn.getCurrentState();
