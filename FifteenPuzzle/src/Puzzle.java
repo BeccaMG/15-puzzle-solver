@@ -108,7 +108,9 @@ public class Puzzle {
     public void shuffle() {
         Random r = new Random();
         int upperLimit = (int) Math.pow(10, n-1);
+        
         int lowerLimit = (int) Math.pow(10, n-2);
+        
         int times = r.nextInt(upperLimit)+lowerLimit;
         int direction;
         for (int i = 0; i <= times; i++) {
