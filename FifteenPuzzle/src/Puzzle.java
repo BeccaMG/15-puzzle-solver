@@ -71,10 +71,10 @@ public class Puzzle {
     /**
      * Size of the puzzle.
      *
-     * @return The size of the puzzle. A 15-Puzzle is size 15.
+     * @return The size of the puzzle. Total tiles, including the blank space.
      */
     public int getSize() {
-        return (n*n)-1;
+        return (n*n);
     }
     
     
