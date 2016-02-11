@@ -34,6 +34,8 @@ public class PuzzleTest {
 		assertFalse(pMove15.toArray().equals(new int []{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,0}));
 		Puzzle pMove1 = puzzle.movePiece(1);
 		assertNull(pMove1);
+		Puzzle pMove2 = puzzle.movePiece(30);
+		assertNull(pMove2);
 	}
 	
 	@Test
@@ -89,5 +91,15 @@ public class PuzzleTest {
 		assertTrue(puzzle.isSolvable());
 		assertFalse(puzzle.isSolved());
 		assertFalse(puzzle.equals(puzzleFromArray));
+	}
+	
+	@Test
+	public void test_inversions(){
+		assertEquals(20,puzzleSolvable.inversions());
+	}
+	
+	@Test
+	public void test_transpose(){
+		assertArrayEquals(new int []{1,0,10,9,2,5,6,11,4,3,14,15,8,13,7,12},puzzleSolvable.transpose().toArray());
 	}
 }

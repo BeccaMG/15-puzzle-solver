@@ -29,7 +29,7 @@ public class Main {
         horizontal = np.inversions();
 //         horizontal = 0;
 //         horizontal1 = np1.inversions();
-        horizontal1 = 0;ls
+        horizontal1 = 0;
         
         System.out.println(vertical);
         System.out.println(horizontal);
