@@ -8,18 +8,26 @@ public class Puzzle {
 
     private int[][] puzzle_grid;
     private int[] puzzle_array;
-    private int n; // (nxn-1)-puzzle (ie. a 15-puzzle will have an n = 4)
+    private int n;
     private Point pZero = null;
 
     /**
-     * nxn Matrix. Game elements [0,(n*n)-1], 0 is the blank space. The puzzle generated would be solved.
+     * A (n*n)-1 Puzzle constructor.
+     *
+     * It creates a N-Puzzle with game elements in [0, (n*n)-1], 0 being the 
+     * blank space. If the user wants to generate a 15-Puzzle, the parameter
+     * passed to the constructor should be 4. This will guaranty that the puzzle
+     * created is always an (n*n-1)-Puzzle so it matches the general algorithms
      * 	
-     * @param n - the dimension of the matrix
+     * @param n The dimension of the puzzle grid. Should be > 1.
      */
     public Puzzle(int n) {
+        if (n < 1)
+            return;
+        
         this.n = n;
         puzzle_grid = new int[n][n];
-        puzzle_array = new int[n * n];
+        puzzle_array = new int[n*n];
         initGrid();
         
         for (int r = 0; r < n; r++)
@@ -29,11 +37,14 @@ public class Puzzle {
         pZero = new Point(n - 1, n - 1);
     }
 
+
     /**
-     * Initialize a puzzle from an array.
-     * Game elements [0,(n*n)-1], 0 is the blank space. n = sqrt(array.length).
+     * Constructs a (n*n)-1 Puzzle from an array.
      *
-     * @param array - a puzzle in an Array representation
+     * Initialize a puzzle from an array of 16 elements in [0,(n*n)-1], 0 being
+     * the blank space. The dimension of the grid: n = sqrt(array.length).
+     *
+     * @param array A N-Puzzle in array representation.
      */
     public Puzzle(int[] array) {
         this.n = (int) Math.sqrt(array.length);
@@ -56,29 +67,52 @@ public class Puzzle {
         }
     }
 
+
     /**
-     * @return the size of the puzzle (total tiles, including the blank space)
+     * Size of the puzzle.
+     *
+     * @return The size of the puzzle. Total tiles, including the blank space.
      */
     public int getSize() {
-        return n * n;
+        return (n*n);
     }
     
+    
     /**
-     * 
-     * @return the Array representation of the puzzle
+     * Dimension of the puzzle grid.
+     *
+     * @return The number of rows/columns in the puzzle equal to the square root
+     * of the size of the puzzle (the size of the puzzle includes the blank space). 
+     * e.g. a 15-Puzzle has dimension 4.
+     */
+    public int getDimension() {
+        return n;
+    }
+    
+    
+    /**
+     * Array representation of the puzzle
+     *
+     * @return The array representation of the puzzle
      */
     public int [] toArray(){
     	return this.puzzle_array;
     }
 
+
     /**
-     * Shuffles the puzzle making 10^(n-1) random movements.
+     * Shuffles the puzzle. 
      *
-     * @param times - number of random movements to shuffle the puzzle
+     * It shuffles the puzzle making random movements of the blank space. The 
+     * number of random movements is in the range of [10^(n-2), 10^(n-1)).
      */
     public void shuffle() {
-    	int times = (int) Math.pow(10, (this.n)-1);
         Random r = new Random();
+        int upperLimit = (int) Math.pow(10, n-1);
+        
+        int lowerLimit = (int) Math.pow(10, n-2);
+        
+        int times = r.nextInt(upperLimit)+lowerLimit;
         int direction;
         for (int i = 0; i <= times; i++) {
             direction = r.nextInt(4) + 1;
@@ -88,12 +122,16 @@ public class Puzzle {
         }
     }
 
+
     /**
-     * Move a piece if possible, it can only be moved if it is adjacent to the blank space
+     * Swap a piece with the blank space.
      *
-     * @param id - Piece id
-     * @return a new Puzzle with the piece specified in the parameter swapped with the blank space
-     * If the piece can't be moved, return NULL
+     * A piece can only be moved if it is adjacent to the blank space. This
+     * method clones the puzzle instance and move the piece in the new puzzle.
+     *
+     * @param id Piece id in [1,size]
+     * @return A new puzzle with the piece specified in the parameter swapped 
+     * with the blank space. NULL if the piece can't be moved.
      */
     public Puzzle movePiece(int id) {
         Puzzle child = this.clone();
@@ -112,10 +150,12 @@ public class Puzzle {
         return null;
     }
 
+
     /**
-     * Possible moves
+     * Computes the possible moves in the board.
      *
-     * @return a List of integers, these integers are the blank space neighbors. This list is never empty.
+     * @return A list of integers representing the blank space neighbors. 
+     * This list is never empty.
      */
     public List<Integer> validMoves() {
         List<Integer> neighbors = new LinkedList<Integer>();
@@ -143,8 +183,11 @@ public class Puzzle {
         return neighbors;
     }
 
+
     /**
-     * Prints the current puzzle.
+     * Prints the puzzle board.
+     *
+     * Before printing, it verifies the invariant of the puzzle.
      */
     public String toString() {
         //Before printing check invariant
@@ -171,33 +214,88 @@ public class Puzzle {
         return str;
     }
 
+
     /**
-     * Checks whether the puzzle is solvable or no
-     * That is done for even-nd-puzzles by calculating number of inversions + the row of the blank tile
-     * if odd then it is solvable and vice-versa
-     * but for odd-nd-puzzles the row of the blank tile is not added and the puzzle is solvable if the sum is even
+     * Checks whether the puzzle is solvable or not.
      *
-     * @return boolean indicating whether puzzle solvable or not
+     * It calculates the number of inversions and verifies if the puzzle is
+     * solvable depending on the board dimension.
+     *
+     * @return Boolean indicating whether the puzzle solvable or not.
+     *
      * @see <a href="https://goo.gl/AO9Fyx">The 8 puzzle problem</a>
      */
     public boolean isSolvable() {
         int sum = 0;
-        for (int i = 0; i < n * n; i++) {
-            for (int j = i + 1; j < n * n; j++)
+
+        if (n % 2 == 0)  // If the board is even, we add the row of the blank space
+            sum += pZero.x;
+            
+        for (int i = 0; i < (n*n); i++) {
+            for (int j = i + 1; j < (n*n); j++)
                 if (puzzle_array[i] > puzzle_array[j] && puzzle_array[j] != 0)
                     sum++;
-
-            sum = (puzzle_array[i] == 0 && n % 2 == 0) ? sum + i / n : sum;
         }
 
         return sum % 2 != n % 2;
     }
+        
+        
+    /**
+     * Computes the number of inversions.
+     *
+     * An inversion is define for a pair of tiles a,b if a > b but b is after
+     * a in an array representation of the board. This method computes the
+     * number of inversions of the puzzle by adding the inversions of each tile.
+     *
+     * @return int with the number of inversions.
+     */
+    public int inversions() {
+        int sum = 0;
+
+        for (int i = 0; i < (n*n); i++) {
+            for (int j = i + 1; j < (n*n); j++)
+                if (puzzle_array[i] > puzzle_array[j] && puzzle_array[j] != 0)
+                    sum++;
+        }
+
+        return sum;
+    }
+        
+        
+    /**
+     * Transpose the puzzle to the right.
+     *
+     * It creates a new puzzle with the rows and columns transposed from this.
+     *
+     * @return A new puzzle with this instance transposed to the right.
+     */
+    public Puzzle transpose() {
+        int[] array = new int[n*n];
+
+        for (int r = 0; r < n; r++)
+            for (int c = 0; c < n; c++)
+                array[r * n + c] = this.puzzle_grid[c][r];
+
+        return new Puzzle(array);
+    }
+    
+    public Puzzle rotateRight() {
+        int[] array = new int[n*n];
+
+        for (int c = 0; c < n; c++)
+            for (int r = n-1; r >=0; r--)
+                array[c * n + (n-1-r)] = this.puzzle_grid[r][c];
+
+        return new Puzzle(array);
+    }
+
 
     /**
-     * Checks whether a passed Puzzle is equal to this puzzle
+     * Checks whether a passed puzzle is equal to this puzzle
      *
-     * @param obj an instance of Puzzle
-     * @return true if the puzzles are equal
+     * @param obj An instance of an object.
+     * @return True if the puzzles are equal.
      */
     public boolean equals(Object obj) {
         if (obj == null)
@@ -207,16 +305,18 @@ public class Puzzle {
 
         Puzzle py = (Puzzle) obj;
 
-        for (int i = 0; i < (n * n); i++)
+        for (int i = 0; i < (n*n); i++)
             if (py.puzzle_array[i] != this.puzzle_array[i])
                 return false;
+            
         return true;
     }
+
 
     /**
      * Clone the puzzle
      *
-     * @return new instance of puzzle
+     * @return New instance of a puzzle equal to this.
      */
     public Puzzle clone() {
         Puzzle newPuzzle = new Puzzle(this.n);
@@ -231,7 +331,10 @@ public class Puzzle {
         return newPuzzle;
     }
 
+
     /**
+     * Verifies the invariant of the puzzle.
+     * 
      * Checks on:
      * <ul>
      * <li>The grid and the array are equal</li>
@@ -240,7 +343,7 @@ public class Puzzle {
      * <li>The zero coordinate is the current position of the blank space</li>
      * </ul>
      *
-     * @return the state of the puzzle
+     * @return True if the state of the puzzle is correct.
      */
     public boolean invariant() {
         //To make sure the array's length is equal to the grid's length equal to the size of puzzle
@@ -283,17 +386,21 @@ public class Puzzle {
         return true;
     }
 
+
     /**
-     * @return true if the puzzle is already solved
+     * Verifies if the puzzle is solved.
+     *
+     * @return True if the puzzle is already solved.
      */
     public boolean isSolved() {
         return this.equals(new Puzzle(this.n));
     }
 
+
     /**
-     * Follow the list of movements specified in the parameter
+     * Follow the list of movements specified in the parameter.
      *
-     * @param l - Integer list with the sequence of pieces to be moved
+     * @param l Integer list with the sequence of pieces to be moved.
      */
     public void followMovements(List<Integer> l) {
         Iterator<Integer> iterator = l.iterator();
@@ -308,8 +415,9 @@ public class Puzzle {
         }
     }
     
+    
     /**
-     * Set puzzle initial values (in solved position)
+     * Set puzzle initial values (in solved position).
      */
     private void initGrid() {
         int val = 1;
@@ -324,12 +432,13 @@ public class Puzzle {
             }
         }
     }
+                
     
     /**
      * Move the blank space if possible.
      *
-     * @param direction - 1 = up, 2 = down, 3 = right, 4 left
-     * @return true = piece moved, false = invalid move
+     * @param direction 1 = up, 2 = down, 3 = right, 4 left
+     * @return True = piece moved, False = invalid move
      */
     private boolean moveBlankSpace(int direction) {
         int nextRow = pZero.x;
@@ -364,6 +473,7 @@ public class Puzzle {
         }
         return false;
     }
+    
     
     /**
      * Search piece index in the grid.
