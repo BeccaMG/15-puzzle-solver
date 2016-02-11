@@ -3,6 +3,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.Produces;
 
+import java.util.Iterator;
 import java.util.List;
 import java.lang.reflect.Method;
 import java.io.File;
@@ -15,9 +16,9 @@ public class PuzzleWS {
     @Produces("application/json")
     public int[] newShuffled(@QueryParam("n") Integer n) {
         Puzzle puzzle = new Puzzle(n);
-        puzzle.shuffle(150);
-        System.out.println(puzzle.puzzle_array);
-        return puzzle.puzzle_array;
+        puzzle.shuffle();
+        System.out.println(puzzle.toArray());
+        return puzzle.toArray();
     }
  
     @GET
@@ -30,14 +31,14 @@ public class PuzzleWS {
     @GET
     @Path("/solve")
     @Produces("application/json")
-    public List<Integer> add(@QueryParam("puzzle") String puzzle) {
+    public String add(@QueryParam("puzzle") String puzzle) {
     	List<Integer> list = null;    	
         Puzzle npuzzle = stringToPuzzle(puzzle);
         Solver s;
         try {
-        	s = new Solver(npuzzle);
+        	s = new Solver();
         } catch (ArrayIndexOutOfBoundsException nfe) {
-            return list;        
+            return "Error - not parsable";        
             }
     	Class[] argTypes = new Class[] { Puzzle.class };		
 		try {
@@ -46,7 +47,16 @@ public class PuzzleWS {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    	return list;
+		StringBuilder strbul  = new StringBuilder();
+	     Iterator<Integer> iter = list.iterator();
+	     while(iter.hasNext())
+	     {
+	         strbul.append(iter.next());
+	        if(iter.hasNext()){
+	         strbul.append(",");
+	        }
+	     }
+		return strbul.toString();
     }
  
     @GET
