@@ -31,14 +31,14 @@ public class PuzzleWS {
     @GET
     @Path("/solve")
     @Produces("application/json")
-    public String add(@QueryParam("puzzle") String puzzle) {
+    public int[] add(@QueryParam("puzzle") String puzzle) {
     	List<Integer> list = null;    	
         Puzzle npuzzle = stringToPuzzle(puzzle);
         Solver s;
         try {
         	s = new Solver();
         } catch (ArrayIndexOutOfBoundsException nfe) {
-            return "Error - not parsable";        
+            return null;        
             }
     	Class[] argTypes = new Class[] { Puzzle.class };		
 		try {
@@ -56,7 +56,12 @@ public class PuzzleWS {
 	         strbul.append(",");
 	        }
 	     }
-		return strbul.toString();
+	     
+		int[] ret = new int[list.size()];
+		for(int i = 0;i < ret.length;i++)
+			ret[i] = list.get(i);
+	    	  
+		return ret;
     }
  
     @GET
