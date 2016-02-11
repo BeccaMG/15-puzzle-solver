@@ -27,13 +27,24 @@ public class Puzzle {
         
         this.n = n;
         puzzle_grid = new int[n][n];
-        puzzle_array = new int[n*n];
-        initGrid();
+        puzzle_array = new int[n*n];    
+        
+        int val = 1;
+        for (int r = 0; r < n; r++) {
+            for (int c = 0; c < n; c++) {
+                if (r == (n - 1) && c == (n - 1)) {
+                    puzzle_grid[r][c] = 0;
+                } else {
+                    puzzle_grid[r][c] = val;
+                    val++;
+                }
+            }
+        }
         
         for (int r = 0; r < n; r++)
             for (int c = 0; c < n; c++)
                 puzzle_array[r * n + c] = puzzle_grid[r][c];
-
+        
         pZero = new Point(n - 1, n - 1);
     }
 
@@ -66,6 +77,12 @@ public class Puzzle {
             }
         }
     }
+    
+    /**
+     * Created just for test purposes.
+     * This constructor is used in PuzzleTest Class that uses JUnit
+     */
+    Puzzle(){}
 
 
     /**
@@ -190,10 +207,6 @@ public class Puzzle {
      * Before printing, it verifies the invariant of the puzzle.
      */
     public String toString() {
-        //Before printing check invariant
-        if (!invariant()) {
-            System.out.println("WARNING: Something may be wrong in the puzzle");
-        }
         String line = "+";
         for (int i = 0; i < n; i++) {
             line = line + "-------+";
@@ -280,6 +293,11 @@ public class Puzzle {
         return new Puzzle(array);
     }
     
+    /**
+     * Rotates the puzzle to the right. Flips the puzzle 90 degrees to the right.
+     *  
+     * @return a new Puzzle right rotated.
+     */
     public Puzzle rotateRight() {
         int[] array = new int[n*n];
 
@@ -415,32 +433,13 @@ public class Puzzle {
         }
     }
     
-    
-    /**
-     * Set puzzle initial values (in solved position).
-     */
-    private void initGrid() {
-        int val = 1;
-        for (int r = 0; r < n; r++) {
-            for (int c = 0; c < n; c++) {
-                if (r == (n - 1) && c == (n - 1)) {
-                    puzzle_grid[r][c] = 0;
-                } else {
-                    puzzle_grid[r][c] = val;
-                    val++;
-                }
-            }
-        }
-    }
-                
-    
     /**
      * Move the blank space if possible.
      *
      * @param direction 1 = up, 2 = down, 3 = right, 4 left
      * @return True = piece moved, False = invalid move
      */
-    private boolean moveBlankSpace(int direction) {
+    protected boolean moveBlankSpace(int direction) {
         int nextRow = pZero.x;
         int nextColumn = pZero.y;
 
@@ -481,7 +480,7 @@ public class Puzzle {
      * @param id Piece id
      * @return Point(r, c) where r = row, c = column
      */
-    private Point searchIndex(int id) {
+    protected Point searchIndex(int id) {
         if (id == 0) {
             return pZero;
         }
