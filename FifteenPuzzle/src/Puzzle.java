@@ -82,7 +82,8 @@ public class Puzzle {
      * Dimension of the puzzle grid.
      *
      * @return The number of rows/columns in the puzzle equal to the square root
-     * of the size of the puzzle minus 1. A 15-Puzzle has dimension 4.
+     * of the size of the puzzle (the size of the puzzle includes the blank space). 
+     * e.g. a 15-Puzzle has dimension 4.
      */
     public int getDimension() {
         return n;

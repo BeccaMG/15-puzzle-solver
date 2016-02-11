@@ -18,6 +18,11 @@ public class PuzzleTest {
 	}
 	
 	@Test
+	public void test_getDimension() {
+		assertEquals(4,puzzleFromArray.getDimension());
+	}
+	
+	@Test
 	public void test_toArray() {
 		assertArrayEquals(new int []{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,0},puzzle.toArray());
 	}
