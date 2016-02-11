@@ -4,22 +4,24 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.6/cerulean/bootstrap.min.css" rel="stylesheet" />
 
     <style>
-      .grid h1 {
+       body { background-color: #D1E0C1 !important;}
+      .puzzle-grid div {
+        background-color:rgba(148, 186, 118, 0.7);
+
+      }
+      .puzzle-grid h1 {
         text-align: center;
         vertical-align: center;
-        line-height: 150px; 
+        line-height: 100px; 
       }
       .square {
-        border: 1px solid #2481a7;
-        width: 100%;
-        height: 23%;
+        border: 1px solid #d4e3c8 !important;
+        height: 20%;
         background-color: #60b7db;
-        border-radius: 25px;
       }
       .square_blanc {
-        width: 100%;
-        height: 23%;
-        border-radius: 25px;
+        background-color:rgba(0, 0, 0, 0) !important;
+        height: 20%;
       }
     .nopadding {
        padding: 0 !important;
@@ -37,12 +39,13 @@
     </style>
   </head>
 
-<body>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/move.js/0.5.0/move.min.js" type="text/javascript"></script>
+<body id="griddiv">
+  
   <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.1.js"></script>
-  <div class="container" style="max-height:600px;">
+  <div class="container">
   <div class="row">
-    <div class="grid">
+    <div class="puzzle-grid">
+    <div class="btn btn-succes col-sm-12 "><h2>Puzzle 15</h2></div>
       <div class="col-sm-3 nopadding">    
         <div id="sqr1" class="square"></div>
         </div>
@@ -95,28 +98,25 @@
         <div id="sqr16" class="square"></div>
         </div>
         <div class="btn btn-succes col-sm-12 ">
-          <button class="btn btn-success btn-lg btn-round"> Solve </button>
+          <button class="btn btn-lg btn-round"> Solve </button>
+          <a href="/puzzle/interface"><button class="btn btn-lg btn-round"> Re-shuffle </button></a>
+          <a href="https://github.com/BeccaMG/tsp-15-puzzle"><img src="http://cdn.flaticon.com/png/256/25231.png" height="40px" align="right"></a>
         </div>
       </div>
     </div>
-    <div class="container"> 
-
+    </div>
     <script>
       var height = document.getElementById("sqr12").offsetHeight
-      console.log(height);
-      var puzzle = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,0];
-      var puzzle2;
+      var puzzle = [1,2,0,4,5,6,7,8,9,10,11,12,13,14,15,3];
+      var divClone = $("#griddiv").clone();
       $.ajax({
         url: '/puzzle/newShuffled?n=4',
         success: function(data){
-            console.log(data);
-            puzzle2 = JSON.parse(JSON.stringify(data));
-            fillPuzzle(puzzle2);
-            //process the JSON data etc
+            puzzle = JSON.parse(JSON.stringify(data));
+            fillPuzzle(puzzle);
         }
       })
 
-      console.log(puzzle2);
 
       function fillPuzzle(puzzleArr) {
         var arrayLength = puzzleArr.length;
@@ -125,65 +125,46 @@
               document.getElementById("sqr"+i).className = "square_blanc";
             } else {
               document.getElementById("sqr"+i).innerHTML = "<h1>"+puzzleArr[i-1]+"</h1>";
+              //document.getElementById("sqr"+i).className = "square";
             }
             
         }   
       }
 
-      ;
-      
-      
-  
-        /*move('#sqr12')
-        .y(height)
-        .ease('ease-in-quart')        
-        .end();
-      move('#sqr16')
-        .y(-height)
-        .ease('out')        
-        .end();
-      */
-     
-      addEventListener('keydown', function(e){
+      function findMovable(direction){
+        if(direction == "up") {
+         var zpos = puzzle.indexOf(0);
+         if (zpos < 12){
+          var row = Math.floor(zpos/4+1)*4;
+          var mpos = (zpos%4)+row;
+          puzzle[zpos] = puzzle[mpos];
+          puzzle[mpos] = 0;         
+          return mpos+1;
+         }
+          return false;
+        }
+
+      }
+
+      function refreshGrid(){
+        $("#griddiv").replaceWith(divClone);
+        fillPuzzle(puzzle);
+        console.log(puzzle);
+      }
+
+      addEventListener('keyup', function(e){
       height = document.getElementById("sqr1").offsetHeight
-      console.log(height)
       width = document.getElementById("sqr1").offsetWidth
-      console.log(width)
         switch (e.keyCode) {
           // down
           case 40:
-            move('#sqr12')
-            .y(height)
-            .ease('snap')        
-            .end();
-          move('#sqr16')
-            .y(-height)
-            .ease('snap')        
-            .end();
+            refreshGrid();
             break;
-          // left
+          // up
           case 38:
-            move('#sqr16')
-            .y(0)
-            .ease('snap')        
-            .end();
-          move('#sqr12')
-            .y(0)
-            .ease('snap')        
-            .end();
-            break;
-
-          case 39:
-            move('#sqr15')
-            .x(width)
-            .ease('snap')        
-            .end();
-            move('#sqr16  ')
-            .x(-width)
-            .ease('snap')        
-            .end();
-            break;
-           
+            findMovable("up");
+            refreshGrid();
+            break;           
         }
       }, false);
       
