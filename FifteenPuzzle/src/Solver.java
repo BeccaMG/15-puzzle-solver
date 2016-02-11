@@ -12,6 +12,13 @@ public class Solver {
 //     static final double MAX_MD_15PUZZLE = 1.0;
     
     /**
+     * Maximum possible X Distance in a 15-Puzzle.
+     *
+     * @see <a href="http://goo.gl/PY47HB">Walking Distance</a>
+     */
+     static final double MAX_XDISTANCE_15PUZZLE = 128.0;
+    
+    /**
      * Maximum number of steps to solve a 15-Puzzle.
      *
      * Used to normalize the cost of moving a tile in the board.
@@ -239,6 +246,41 @@ public class Solver {
         
         return (md * MAX_MD_15PUZZLE > id ? md : id/58.0);
     }
+    
+    /**
+     * X Distance
+     *
+     * This is a simple fitness functions that determines linearly the distance between the
+     * correct position of the tile and the current position.
+     * It uses solely the array representation of the puzzle.
+     * This fitness deliver fast results with expenses of accuracy. 
+     * @see <a href="http://goo.gl/ZNPgu0">Speed or Accuracy</a>
+     *
+     * @param puzzle The puzzle of which the fitness value will be computed
+     * @return A number between 0 and 1, representing the estimated cost to 
+     *         reach the solved puzzle (normalized).
+     */
+    
+    public double xDistance(Puzzle puzzle) {
+        int size = puzzle.getSize();
+        int rawmetric = 0;
+        int zeroOutPlace = 0;        
+        for (int i = 0;i<size-1;i++) {
+            if (puzzle.toArray()[i] == 0 ) {
+                rawmetric += size -i;
+                zeroOutPlace++;
+            } else {
+                //rawmetric += Math.abs(puzzle.toArray()[i]-(i+1));
+                rawmetric += Math.abs(puzzle.toArray()[i]-(i+1));
+            }
+        }
+        rawmetric += Math.abs(size - puzzle.toArray()[size-1]-1)*zeroOutPlace;
+        return rawmetric/MAX_XDISTANCE_15PUZZLE;
+      
+    }
+    
+    
+    
             
     
 /* ---------------------------- SOLVING ALGORITHMS ---------------------------*/
