@@ -8,21 +8,44 @@ public class Main {
     
 //     static int[] a = {15,4,9,2,0,11,14,1,5,13,10,7,8,12,3,6};
     static int[] a = {10,11,9,14,3,5,8,4,7,0,13,15,2,12,6,1};
+//     static int[] a = {0,12,9,13,15,11,10,14,3,7,2,5,4,8,6,1};
+//     static int[] a = {0,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1};
+//     static int[] a = {11,12,14,13,15,0,10,9,8,7,6,5,4,3,2,1};
 	static Puzzle p = new Puzzle(4);
 
 	public static void main(String[] args){
 		//1 = up, 2 = down, 3 = right, 4 left
-// 		System.out.println(p.toString());
+		p.shuffle();
+		int vertical;
+        int horizontal;
+		int horizontal1;
+        Puzzle np = p.transpose();
+		Puzzle np1 = p.rotateRight();
+        System.out.println(p.toString());
+        System.out.println(np.toString());
+        System.out.println(np1.toString());
+        
+        vertical = p.inversions();
+        horizontal = np.inversions();
+//         horizontal = 0;
+//         horizontal1 = np1.inversions();
+        horizontal1 = 0;ls
+        
+        System.out.println(vertical);
+        System.out.println(horizontal);
+		System.out.println(horizontal1);
+		System.out.println((vertical + horizontal +horizontal1)/3 + (vertical + horizontal+horizontal1)%3);
+		
 // 		System.out.println("Displayed puzzle solved? (should be true)... "+p.isSolved());
 
-		p.shuffle();
 // 		System.out.println("Shuffled  puzzle solved? (should be false)... "+p.isSolved()+"\n");
 // 		System.out.println(Arrays.toString(p.puzzle_array));
 // 		System.out.println(p.toString());
 //         System.out.println(p.isSolvable());
 		Solver s = new Solver();
 //  		System.out.println("Hamming distance = "+s.hammingDistance(p));
-//         System.out.println("Manhattan distance = "+s.manhattanDistance(p));
+        System.out.println("Manhattan Distance = "+s.manhattanDistance(p));
+        System.out.println("Walking Distance = "+s.walkingDistancePrime(p));
 
 
 
@@ -91,8 +114,9 @@ public class Main {
         System.out.println("\n\n************ START  Test aStar() ************");
         try {
 //             Method m = (Solver.class).getDeclaredMethod("hammingDistance", argTypes);
-            Method m = (Solver.class).getDeclaredMethod("manhattanDistance", argTypes);
+//             Method m = (Solver.class).getDeclaredMethod("manhattanDistance", argTypes);
 //             Method m = (Solver.class).getDeclaredMethod("geometricSeries", argTypes);
+            Method m = (Solver.class).getDeclaredMethod("walkingDistancePrime", argTypes);
             list = s.aStar(p, m);
         } catch (Exception e) {
             e.printStackTrace();
@@ -109,8 +133,9 @@ public class Main {
 		System.out.println("\n\n************ START  Test idaStar() ************");
 		try {
 //             Method m = (Solver.class).getDeclaredMethod("hammingDistance", argTypes);
-            Method m = (Solver.class).getDeclaredMethod("manhattanDistance", argTypes);
+//             Method m = (Solver.class).getDeclaredMethod("manhattanDistance", argTypes);
 //             Method m = (Solver.class).getDeclaredMethod("geometricSeries", argTypes);
+            Method m = (Solver.class).getDeclaredMethod("walkingDistancePrime", argTypes);
             list = s.idaStar(p, m);
         } catch (Exception e) {
             e.printStackTrace();

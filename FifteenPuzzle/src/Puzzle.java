@@ -238,6 +238,56 @@ public class Puzzle {
 
         return sum % 2 != n % 2;
     }
+        
+        
+    /**
+     * Computes the number of inversions.
+     *
+     * An inversion is define for a pair of tiles a,b if a > b but b is after
+     * a in an array representation of the board. This method computes the
+     * number of inversions of the puzzle by adding the inversions of each tile.
+     *
+     * @return int with the number of inversions.
+     */
+    public int inversions() {
+        int sum = 0;
+
+        for (int i = 0; i < (n*n); i++) {
+            for (int j = i + 1; j < (n*n); j++)
+                if (puzzle_array[i] > puzzle_array[j] && puzzle_array[j] != 0)
+                    sum++;
+        }
+
+        return sum;
+    }
+        
+        
+    /**
+     * Transpose the puzzle to the right.
+     *
+     * It creates a new puzzle with the rows and columns transposed from this.
+     *
+     * @return A new puzzle with this instance transposed to the right.
+     */
+    public Puzzle transpose() {
+        int[] array = new int[n*n];
+
+        for (int r = 0; r < n; r++)
+            for (int c = 0; c < n; c++)
+                array[r * n + c] = this.puzzle_grid[c][r];
+
+        return new Puzzle(array);
+    }
+    
+    public Puzzle rotateRight() {
+        int[] array = new int[n*n];
+
+        for (int c = 0; c < n; c++)
+            for (int r = n-1; r >=0; r--)
+                array[c * n + (n-1-r)] = this.puzzle_grid[r][c];
+
+        return new Puzzle(array);
+    }
 
 
     /**

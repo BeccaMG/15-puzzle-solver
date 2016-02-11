@@ -3,8 +3,26 @@ import java.lang.reflect.Method;
 
 public class Solver {
     
-//     private final double normalizedStepCost = (1.0/80.0);
-    private final double normalizedStepCost = (1.0);
+    /**
+    * Maximum possible Manhattan Distance in a 15-Puzzle.
+    *
+    * @see <a href="http://goo.gl/PY47HB">Walking Distance</a>
+    */
+    static final double MAX_MD_15PUZZLE = 60.0;
+//     static final double MAX_MD_15PUZZLE = 1.0;
+    
+    /**
+     * Maximum number of steps to solve a 15-Puzzle.
+     *
+     * Used to normalize the cost of moving a tile in the board.
+     *
+     * @see <a href="http://goo.gl/6n2R6x">The parallel search bench ZRAM and its applications</a>
+     */
+    static final double MAX_STEPS_15PUZZLE = 80.0;
+    static final double normalizedStepCost = (1.0/MAX_STEPS_15PUZZLE);
+    
+    private int depthLevel = 0;
+//     private final double normalizedStepCost = (1.0);
 
 
     /**
@@ -130,8 +148,7 @@ public class Solver {
             if ((array[i] != (i + 1)) && (array[i] != 0))
                 misplacedTiles++;
 
-//         return misplacedTiles / (size);
-        return misplacedTiles;
+        return misplacedTiles / (size-1);
     }
 
 
@@ -164,10 +181,7 @@ public class Solver {
                 distance += rows + columns;
             }
         }
-//         return (distance / Math.pow(n, 3));
-//         return (distance / 58.0);
-//         return (distance / 57.0);
-        return distance;
+        return (distance / MAX_MD_15PUZZLE);
     }
 
 
@@ -184,7 +198,11 @@ public class Solver {
      * @return A number between 0 and 1, representing the estimated cost to 
      *         reach the solved puzzle (normalized).
      */     
-    public double geometricSeries(Puzzle puzzle) {        
+    public double geometricSeries(Puzzle puzzle) {   
+        // Given the fact the sum is not exactly 1
+        if (puzzle.isSolved())
+            return 0;
+        
         double sum = 1;
         int size = puzzle.getSize();
         int[] array = puzzle.toArray();
@@ -195,6 +213,31 @@ public class Solver {
             }
         
         return sum;
+    }
+            
+            
+    /**
+     * The Geometric Series of sum(2^-n).
+     *
+     * This fitness function adds the term 2^-<i>i</i> if the tile <i>i</i> is in its
+     * place on the current board. Then returns the 1 minus the sum of all terms
+     * of tiles in the right place. Proposed by J. Paul Gibson.
+     *
+     * @see <a href="https://goo.gl/3P0uPB">Wolfram-Alpha geometric series</a>
+     *
+     * @param puzzle The puzzle of which the fitness value will be computed
+     * @return A number between 0 and 1, representing the estimated cost to 
+     *         reach the solved puzzle (normalized).
+     */     
+    public double walkingDistancePrime(Puzzle puzzle) {
+        
+        double md = manhattanDistance(puzzle);
+        Puzzle np = puzzle.transpose();
+        int vertical = puzzle.inversions();
+        int horizontal = np.inversions();
+        double id = (vertical + horizontal) / 3 + (vertical + horizontal) % 3;
+        
+        return (md * MAX_MD_15PUZZLE > id ? md : id/58.0);
     }
             
     
@@ -209,6 +252,7 @@ public class Solver {
      * for being extremely memory-overhead.
      *
      * It outputs the elapsed time and sequence of moves found to solve the puzzle.
+     * It resets the depth level of the solver.
      *
      * @param puzzle The puzzle to solve
      * @param fitnessFunction Fitness function used to compute the priority of
@@ -227,8 +271,6 @@ public class Solver {
             return null;
 
         PriorityQueue<PuzzleNode> pqueue = new PriorityQueue<PuzzleNode>();        
-//         List<Integer> maxs;
-//         int maxn = 0;
         long start;
         long end;
         
@@ -282,15 +324,14 @@ public class Solver {
 
                         pqueue.add(newPuzzleNode);
                         
-//                         if (newPuzzleNode.getListOfSteps().size() > maxn) {
-//                             maxs = newPuzzleNode.getListOfSteps();
-//                             maxn = maxs.size();
-//                         }
                     }
                 }
 
                 currentPuzzleNode = pqueue.poll();
                 currentPuzzle = currentPuzzleNode.getCurrentState();
+                
+                if (currentPuzzleNode.getListOfSteps().size() > this.depthLevel)
+                    depthLevel = currentPuzzleNode.getListOfSteps().size();
 
             }
                         
@@ -301,8 +342,8 @@ public class Solver {
             System.out.println("Solution in " + currentPuzzleNode.getListOfSteps().size() 
                                + " steps:\n" + currentPuzzleNode.getListOfSteps());
             System.out.println("Time: " + (end-start)/1000 + " seconds");
-//             System.out.println("Maxn: " + maxn);
-//             System.out.println("Pqueue: " + pqueue.size());
+            System.out.println("Max depth level reached: " + depthLevel);
+            depthLevel = 0;
         
             return currentPuzzleNode.getListOfSteps();
         
@@ -322,6 +363,7 @@ public class Solver {
      * when reaching a threshold.
      *
      * It outputs the elapsed time and sequence of moves found to solve the puzzle.
+     * It resets the depth level of the solver.
      *
      * @param puzzle The puzzle to solve
      * @param fitnessFunction Fitness function used to compute the priority of
@@ -369,6 +411,8 @@ public class Solver {
             System.out.println("Solution in " + root.getListOfSteps().size() + 
                                " steps:\n" + root.getListOfSteps());
             System.out.println("Time: " + (end-start)/1000 + " seconds");
+            System.out.println("Max depth level reached: " + depthLevel);
+            depthLevel = 0;
 
             return root.getListOfSteps();
             
@@ -396,7 +440,7 @@ public class Solver {
      */    
     private double dfs(PuzzleNode pn, double threshold, Method fitnessFunction) throws Exception {
     
-        Puzzle currentPuzzle = pn.getCurrentState();
+        Puzzle currentPuzzle = pn.getCurrentState();                
         
         if (pn.getPriority() > threshold) {
             return pn.getPriority();
@@ -431,8 +475,11 @@ public class Solver {
                 
                 deepSearch = dfs(newPuzzleNode, threshold, fitnessFunction);
                 
+                
                 if (deepSearch == -1.0) {
-                    pn.addStepToList(newPuzzleNode.getListOfSteps(), tile);
+                    pn.addStepToList(newPuzzleNode.getListOfSteps(), tile);                    
+                    if (pn.getListOfSteps().size() > this.depthLevel)
+                        depthLevel = pn.getListOfSteps().size();
                     return -1.0;
                 }
                 
