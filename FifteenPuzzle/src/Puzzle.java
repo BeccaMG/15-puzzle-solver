@@ -275,11 +275,11 @@ public class Puzzle {
         
         
     /**
-     * Transpose the puzzle to the right.
+     * Transpose the puzzle.
      *
      * It creates a new puzzle with the rows and columns transposed from this.
      *
-     * @return A new puzzle with this instance transposed to the right.
+     * @return A new puzzle with this instance transposed.
      */
     public Puzzle transpose() {
         int[] array = new int[n*n];
@@ -287,21 +287,6 @@ public class Puzzle {
         for (int r = 0; r < n; r++)
             for (int c = 0; c < n; c++)
                 array[r * n + c] = this.puzzle_grid[c][r];
-
-        return new Puzzle(array);
-    }
-    
-    /**
-     * Rotates the puzzle to the right. Flips the puzzle 90 degrees to the right.
-     *  
-     * @return a new Puzzle right rotated.
-     */
-    public Puzzle rotateRight() {
-        int[] array = new int[n*n];
-
-        for (int c = 0; c < n; c++)
-            for (int r = n-1; r >=0; r--)
-                array[c * n + (n-1-r)] = this.puzzle_grid[r][c];
 
         return new Puzzle(array);
     }
