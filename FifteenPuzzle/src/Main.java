@@ -12,7 +12,7 @@ public class Main {
         Puzzle p = new Puzzle(a);
         while (true) {
             Scanner in = new Scanner(System.in);
-            System.out.println("\n\nWelcome to the Awesome Analyser");
+            System.out.println("\n\nWelcome to the Awesome 2.0 Analyser");
             System.out.println("1. Solve an easy puzzle like:");
             System.out.println(p.toString());            
             System.out.println("2. Solve a shuffled puzzle");
@@ -20,8 +20,7 @@ public class Main {
             System.out.print("\nEnter option: ");
             try {
                 int opt = in.nextInt();
-
-                if (opt == 1) {                    
+                if (opt == 1) {
                     break;
                 } else if (opt == 2) {
                     System.out.println("\n\nSince a randomly shuffled puzzle" + 
