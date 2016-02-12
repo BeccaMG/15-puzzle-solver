@@ -9,12 +9,18 @@ public class Solver {
     * @see <a href="http://goo.gl/PY47HB">Walking Distance</a>
     */
     static final double MAX_MD_15PUZZLE = 60.0;
-//     static final double MAX_MD_15PUZZLE = 1.0;
+    
+    /**
+    * Maximum possible Invert Distance in a 15-Puzzle.
+    *
+    * @see <a href="http://goo.gl/PY47HB">Invert Distance</a>
+    */
+    static final double MAX_ID_15PUZZLE = 70.0;
     
     /**
      * Maximum possible X Distance in a 15-Puzzle.
      *
-     * @see <a href="http://goo.gl/PY47HB">Walking Distance</a>
+     * @see <a href="http://goo.gl/ZNPgu0">X Distance</a>
      */
      static final double MAX_XDISTANCE_15PUZZLE = 128.0;
     
@@ -26,10 +32,9 @@ public class Solver {
      * @see <a href="http://goo.gl/6n2R6x">The parallel search bench ZRAM and its applications</a>
      */
     static final double MAX_STEPS_15PUZZLE = 80.0;
-    static final double normalizedStepCost = (1.0/MAX_STEPS_15PUZZLE);
+    private final double normalizedStepCost = (1.0/MAX_STEPS_15PUZZLE);
     
     private int depthLevel = 0;
-//     private final double normalizedStepCost = (1.0);
 
 
     /**
@@ -224,13 +229,18 @@ public class Solver {
             
             
     /**
-     * The Geometric Series of sum(2^-n).
+     * A modified Walking Distance (Walking Distance').
      *
-     * This fitness function adds the term 2^-<i>i</i> if the tile <i>i</i> is in its
-     * place on the current board. Then returns the 1 minus the sum of all terms
-     * of tiles in the right place. Proposed by J. Paul Gibson.
+     * It computes the inversions of the puzzle and divides them by three
+     * (because the inversions change only when you move the tiles vertically)
+     * and the inversions of the transposed puzzle (to simulate the horizontal
+     * movements). This is called the Invert Distance. It returns the average of
+     * the Manhattan Distance and the Invert Distance.
      *
-     * @see <a href="https://goo.gl/3P0uPB">Wolfram-Alpha geometric series</a>
+     * Is a modification of the original Walking Distance, which creates a
+     * database in the host system.
+     *
+     * @see <a href="http://goo.gl/PY47HB">Walking Distance</a>
      *
      * @param puzzle The puzzle of which the fitness value will be computed
      * @return A number between 0 and 1, representing the estimated cost to 
@@ -238,48 +248,48 @@ public class Solver {
      */     
     public double walkingDistancePrime(Puzzle puzzle) {
         
-        double md = manhattanDistance(puzzle);
         Puzzle np = puzzle.transpose();
-        int vertical = puzzle.inversions();
-        int horizontal = np.inversions();
-        double id = (vertical + horizontal) / 3 + (vertical + horizontal) % 3;
+
+        double vertical = puzzle.inversions();
+        double horizontal = np.inversions();
         
-        return (md * MAX_MD_15PUZZLE > id ? md : id/58.0);
+        double md = manhattanDistance(puzzle);
+        double id = (vertical + horizontal) / 3;
+        id = id / MAX_ID_15PUZZLE;
+        
+        return (md + id) / 2;
     }
     
+    
     /**
-     * X Distance
+     * X Distance.
      *
-     * This is a simple fitness functions that determines linearly the distance between the
-     * correct position of the tile and the current position.
-     * It uses solely the array representation of the puzzle.
+     * This is a simple fitness functions that determines linearly the 
+     * distance between the correct position of the tile and the current 
+     * position.
+     *
+     * It uses solely the array representation of the puzzle. 
+     *
      * This fitness deliver fast results with expenses of accuracy. 
+     * 
      * @see <a href="http://goo.gl/ZNPgu0">Speed or Accuracy</a>
      *
      * @param puzzle The puzzle of which the fitness value will be computed
      * @return A number between 0 and 1, representing the estimated cost to 
      *         reach the solved puzzle (normalized).
      */
-    
     public double xDistance(Puzzle puzzle) {
-        int size = puzzle.getSize();
+        int size = puzzle.getSize()-1;
         int rawmetric = 0;
-        int zeroOutPlace = 0;        
-        for (int i = 0;i<size-1;i++) {
+        for (int i = 0; i < size; i++) {
             if (puzzle.toArray()[i] == 0 ) {
-                rawmetric += size -i;
-                zeroOutPlace++;
+                rawmetric += size-i;
             } else {
-                //rawmetric += Math.abs(puzzle.toArray()[i]-(i+1));
                 rawmetric += Math.abs(puzzle.toArray()[i]-(i+1));
             }
         }
-        rawmetric += Math.abs(size - puzzle.toArray()[size-1]-1)*zeroOutPlace;
-        return rawmetric/MAX_XDISTANCE_15PUZZLE;
-      
+        return rawmetric/MAX_XDISTANCE_15PUZZLE;      
     }
-    
-    
     
             
     
@@ -332,7 +342,8 @@ public class Solver {
 
             PuzzleNode currentPuzzleNode = pqueue.poll();
             Puzzle currentPuzzle = currentPuzzleNode.getCurrentState();
-            System.out.println("Initial puzzle in aStar with " + fitnessFunction.getName() + " of " + 
+            System.out.println("Initial puzzle in aStar with " + 
+                               fitnessFunction.getName() + " of " + 
                                result + "\n" + currentPuzzle.toString());
 
             List<Integer> validMoves;
@@ -355,7 +366,8 @@ public class Solver {
 
                         result = (double) fitnessFunction.invoke(this, neighbor);
                         
-                        newMoves = currentPuzzleNode.getMovesDoneSoFar() + normalizedStepCost;
+                        newMoves = currentPuzzleNode.getMovesDoneSoFar() 
+                                    + normalizedStepCost;
                         newPriority = result + newMoves;
                         
                         newPuzzleNode = new PuzzleNode(
@@ -381,8 +393,10 @@ public class Solver {
                         
             end = System.currentTimeMillis();
             
-            System.out.println("Solution in " + currentPuzzleNode.getListOfSteps().size() 
-                               + " steps:\n" + currentPuzzleNode.getListOfSteps());
+            System.out.println("Solution in " + 
+                                currentPuzzleNode.getListOfSteps().size() 
+                               + " steps:\n" + 
+                                currentPuzzleNode.getListOfSteps());
             System.out.println("Time: " + (end-start)/1000 + " seconds");
             System.out.println("Max depth level reached: " + depthLevel);
             depthLevel = 0;
@@ -437,7 +451,8 @@ public class Solver {
             
             PuzzleNode root = new PuzzleNode(puzzle, null, threshold, 0.0);
             
-            System.out.println("Initial puzzle in idaStar with " + fitnessFunction.getName() + " of " 
+            System.out.println("Initial puzzle in idaStar with " 
+                            + fitnessFunction.getName() + " of " 
                             + threshold + "\n" + puzzle.toString());
 
             while (deepSearch != -1.0) { // While not found in the children
@@ -480,7 +495,8 @@ public class Solver {
      * @return The priority higher than a threshold if found or -1 if the solved
      *         puzzle is reached.
      */    
-    private double dfs(PuzzleNode pn, double threshold, Method fitnessFunction) throws Exception {
+    protected double dfs(PuzzleNode pn, double threshold, Method fitnessFunction) 
+            throws Exception {
     
         Puzzle currentPuzzle = pn.getCurrentState();                
         
