@@ -78,9 +78,9 @@ public class Main {
             Method m1 = (Solver.class).getDeclaredMethod("xDistance", argTypes);
             Method m2 = (Solver.class).getDeclaredMethod("manhattanDistance", argTypes);
             Method m3 = (Solver.class).getDeclaredMethod("walkingDistancePrime", argTypes);
-            list = s.aStar(p, m1);
-            list = s.aStar(p, m2);
-            list = s.aStar(p, m3);
+            list = s.idaStar(p, m1);
+            list = s.idaStar(p, m2);
+            list = s.idaStar(p, m3);
         } catch (Exception e) {
             e.printStackTrace();
         } catch (OutOfMemoryError e) {
