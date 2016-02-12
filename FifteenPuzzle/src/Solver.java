@@ -279,17 +279,21 @@ public class Solver {
      *         reach the solved puzzle (normalized).
      */
     public double xDistance(Puzzle puzzle) {
-        int size = puzzle.getSize()-1;
-        int rawmetric = 0;
-        for (int i = 0; i < size; i++) {
-            if (puzzle.toArray()[i] == 0 ) {
-                rawmetric += size-i;
-            } else {
-                rawmetric += Math.abs(puzzle.toArray()[i]-(i+1));
-            }
-        }
-        return rawmetric/MAX_XDISTANCE_15PUZZLE;      
-    }
+   	 int size = puzzle.getSize();
+   	 int rawmetric = 0;
+   	 int zeroOutPlace = 0;
+   	 int [] array = puzzle.toArray(); 
+   	 	for (int i = 0;i<size-1;i++) {
+   	 		if (array[i] == 0 ) {
+   	 			rawmetric += size -i;
+   	 			zeroOutPlace=1;
+   	 		} else {
+   	 			rawmetric += Math.abs(array[i]-(i+1));
+   	 		}
+	    	}
+	    rawmetric += Math.abs(size - array[size-1]-1)*zeroOutPlace;
+	    return rawmetric/MAX_XDISTANCE_15PUZZLE;
+   }
     
             
     
