@@ -1,0 +1,43 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/init"
+    android:id="@+id/main_layout"
+    tools:context="com.awesome.awesomefifteenpuzzle.FifteenPuzzle">
+
+    <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="0.02in"
+        android:layout_marginTop="1.2in"
+        android:layout_gravity="center"
+        android:columnCount="4"
+        android:orientation="horizontal"
+        android:id="@+id/secondlayout"
+        android:layout_row="0"
+        android:layout_column="0"
+        android:fitsSystemWindows="true">
+
+        <Button android:text="@string/block1" android:id="@+id/block1" android:background="#966B98ED"/>
+        <Button android:text="@string/block2" android:id="@+id/block2" android:background="#966B98ED"/>
+        <Button android:text="@string/block3" android:id="@+id/block3" android:background="#966B98ED"/>
+        <Button android:text="@string/block4" android:id="@+id/block4" android:background="#966B98ED"/>
+        <Button android:text="@string/block5" android:id="@+id/block5" android:background="#966B98ED"/>
+        <Button android:text="@string/block6" android:id="@+id/block6" android:background="#966B98ED"/>
+        <Button android:text="@string/block7" android:id="@+id/block7" android:background="#966B98ED"/>
+        <Button android:text="@string/block8" android:id="@+id/block8" android:background="#966B98ED"/>
+        <Button android:text="@string/block9" android:id="@+id/block9" android:background="#966B98ED"/>
+        <Button android:text="@string/block10" android:id="@+id/block10" android:background="#966B98ED"/>
+        <Button android:text="@string/block11" android:id="@+id/block11" android:background="#966B98ED"/>
+        <Button android:text="@string/block12" android:id="@+id/block12" android:background="#966B98ED"/>
+        <Button android:text="@string/block13" android:id="@+id/block13" android:background="#966B98ED"/>
+        <Button android:text="@string/block14" android:id="@+id/block14" android:background="#966B98ED"/>
+        <Button android:text="@string/block15" android:id="@+id/block15" android:background="#966B98ED"/>
+        <Button android:text="@string/block0" android:id="@+id/block0" android:background="#00a36868"/>
+        <Button android:text="Shuffle" android:id="@+id/shuffle"
+            android:layout_row="4" android:layout_column="1"/>
+        <Button android:text="solve" android:id="@+id/solve"
+            android:layout_row="4" android:layout_column="2"/>
+    </GridLayout>
+</FrameLayout>

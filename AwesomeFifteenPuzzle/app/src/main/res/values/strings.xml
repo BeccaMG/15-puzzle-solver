@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Awesome Fifteen Puzzle</string>
+
+    <string name="block0"></string>
+    <string name="block1">1</string>
+    <string name="block2">2</string>
+    <string name="block3">3</string>
+    <string name="block4">4</string>
+    <string name="block5">5</string>
+    <string name="block6">6</string>
+    <string name="block7">7</string>
+    <string name="block8">8</string>
+    <string name="block9">9</string>
+    <string name="block10">10</string>
+    <string name="block11">11</string>
+    <string name="block12">12</string>
+    <string name="block13">13</string>
+    <string name="block14">14</string>
+    <string name="block15">15</string>
+
+</resources>
