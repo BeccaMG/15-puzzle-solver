@@ -1,0 +1,908 @@
+
+
+************ START  Test aStar() ************
+
+
+Initial puzzle in aStar with xDistance of 0.359375
++-------+-------+-------+-------+
+|  1	|  6	|  2	|  4	|
++-------+-------+-------+-------+
+|    	|  10	|  7	|  8	|
++-------+-------+-------+-------+
+|  3	|  5	|  15	|  11	|
++-------+-------+-------+-------+
+|  9	|  13	|  14	|  12	|
++-------+-------+-------+-------+
+
+Solution in 17 steps:
+[3, 5, 10, 3, 5, 9, 13, 14, 15, 7, 3, 6, 2, 3, 7, 11, 12]
+Time: 27 miliseconds
+Max depth level reached: 22
+Solver Profiler ==========================
+Function_idaStar:0
+Function_aStar:1
+Function_xDistance:1583
+Function_walkingDistancePrime:0
+Function_geometricSeries:0
+Function_manhattanDistance:0
+Function_hammingDistance:0
+Function_compareTo:17252
+Function_addStepToList:1582
+Function_getListOfSteps:2424
+Function_getPriority:0
+Function_getMovesDoneSoFar:1582
+Function_getPreviousState:2398
+Function_getCurrentState:818
+Constructor_puzzleNode:1583
+Puzzle Profiler ==========================
+Function_followMovements:0
+Function_isSolved:818
+Function_invariant:0
+Function_clone:2398
+Function_equals:3216
+Function_transpose:0
+Function_inversions:0
+Function_isSolvable:1
+Function_toString:1
+Function_validMoves:3215
+Function_movePiece:2398
+Function_shuffle:0
+Function_toArray:0
+Function_getDimension:0
+Function_getSize:1583
+Constructor_puzzle:3216
+
+
+Initial puzzle in aStar with manhattanDistance of 0.25
++-------+-------+-------+-------+
+|  1	|  6	|  2	|  4	|
++-------+-------+-------+-------+
+|    	|  10	|  7	|  8	|
++-------+-------+-------+-------+
+|  3	|  5	|  15	|  11	|
++-------+-------+-------+-------+
+|  9	|  13	|  14	|  12	|
++-------+-------+-------+-------+
+
+Solution in 17 steps:
+[3, 5, 10, 3, 5, 9, 13, 14, 15, 7, 3, 6, 2, 3, 7, 11, 12]
+Time: 2 miliseconds
+Max depth level reached: 17
+Solver Profiler ==========================
+Function_idaStar:0
+Function_aStar:2
+Function_xDistance:1583
+Function_walkingDistancePrime:0
+Function_geometricSeries:0
+Function_manhattanDistance:56
+Function_hammingDistance:0
+Function_compareTo:17507
+Function_addStepToList:1637
+Function_getListOfSteps:2523
+Function_getPriority:0
+Function_getMovesDoneSoFar:1637
+Function_getPreviousState:2476
+Function_getCurrentState:843
+Constructor_puzzleNode:1639
+Puzzle Profiler ==========================
+Function_followMovements:0
+Function_isSolved:843
+Function_invariant:0
+Function_clone:2476
+Function_equals:3319
+Function_transpose:0
+Function_inversions:0
+Function_isSolvable:2
+Function_toString:2
+Function_validMoves:3317
+Function_movePiece:2476
+Function_shuffle:0
+Function_toArray:0
+Function_getDimension:56
+Function_getSize:1639
+Constructor_puzzle:3319
+
+
+Initial puzzle in aStar with walkingDistancePrime of 0.25595238095238093
++-------+-------+-------+-------+
+|  1	|  6	|  2	|  4	|
++-------+-------+-------+-------+
+|    	|  10	|  7	|  8	|
++-------+-------+-------+-------+
+|  3	|  5	|  15	|  11	|
++-------+-------+-------+-------+
+|  9	|  13	|  14	|  12	|
++-------+-------+-------+-------+
+
+Solution in 17 steps:
+[3, 5, 10, 3, 5, 9, 13, 14, 15, 7, 3, 6, 2, 3, 7, 11, 12]
+Time: 5 miliseconds
+Max depth level reached: 17
+Solver Profiler ==========================
+Function_idaStar:0
+Function_aStar:3
+Function_xDistance:1583
+Function_walkingDistancePrime:266
+Function_geometricSeries:0
+Function_manhattanDistance:322
+Function_hammingDistance:0
+Function_compareTo:19281
+Function_addStepToList:1902
+Function_getListOfSteps:2935
+Function_getPriority:0
+Function_getMovesDoneSoFar:1902
+Function_getPreviousState:2867
+Function_getCurrentState:971
+Constructor_puzzleNode:1905
+Puzzle Profiler ==========================
+Function_followMovements:0
+Function_isSolved:971
+Function_invariant:0
+Function_clone:2867
+Function_equals:3838
+Function_transpose:266
+Function_inversions:532
+Function_isSolvable:3
+Function_toString:3
+Function_validMoves:3835
+Function_movePiece:2867
+Function_shuffle:0
+Function_toArray:0
+Function_getDimension:322
+Function_getSize:1905
+Constructor_puzzle:3838
+
+
+Initial puzzle in aStar with xDistance of 0.59375
++-------+-------+-------+-------+
+|  1	|  7	|  10	|  8	|
++-------+-------+-------+-------+
+|    	|  3	|  11	|  2	|
++-------+-------+-------+-------+
+|  5	|  13	|  12	|  15	|
++-------+-------+-------+-------+
+|  6	|  9	|  14	|  4	|
++-------+-------+-------+-------+
+
+Solution in 33 steps:
+[5, 6, 9, 13, 6, 9, 13, 14, 12, 15, 4, 12, 15, 11, 10, 8, 2, 4, 11, 10, 8, 2, 4, 8, 3, 7, 2, 3, 7, 6, 10, 11, 12]
+Time: 160 miliseconds
+Max depth level reached: 42
+Solver Profiler ==========================
+Function_idaStar:0
+Function_aStar:4
+Function_xDistance:64954
+Function_walkingDistancePrime:266
+Function_geometricSeries:0
+Function_manhattanDistance:322
+Function_hammingDistance:0
+Function_compareTo:1187314
+Function_addStepToList:65272
+Function_getListOfSteps:99420
+Function_getPriority:0
+Function_getMovesDoneSoFar:65272
+Function_getPreviousState:99306
+Function_getCurrentState:34042
+Constructor_puzzleNode:65276
+Puzzle Profiler ==========================
+Function_followMovements:0
+Function_isSolved:34042
+Function_invariant:0
+Function_clone:99306
+Function_equals:133348
+Function_transpose:266
+Function_inversions:532
+Function_isSolvable:4
+Function_toString:4
+Function_validMoves:133344
+Function_movePiece:99306
+Function_shuffle:0
+Function_toArray:0
+Function_getDimension:322
+Function_getSize:65276
+Constructor_puzzle:133348
+
+
+Initial puzzle in aStar with manhattanDistance of 0.45
++-------+-------+-------+-------+
+|  1	|  7	|  10	|  8	|
++-------+-------+-------+-------+
+|    	|  3	|  11	|  2	|
++-------+-------+-------+-------+
+|  5	|  13	|  12	|  15	|
++-------+-------+-------+-------+
+|  6	|  9	|  14	|  4	|
++-------+-------+-------+-------+
+
+Solution in 33 steps:
+[5, 6, 9, 13, 6, 9, 13, 14, 12, 15, 4, 12, 15, 11, 10, 8, 2, 4, 11, 10, 8, 2, 4, 8, 3, 7, 2, 3, 7, 6, 10, 11, 12]
+Time: 8 miliseconds
+Max depth level reached: 33
+Solver Profiler ==========================
+Function_idaStar:0
+Function_aStar:5
+Function_xDistance:64954
+Function_walkingDistancePrime:266
+Function_geometricSeries:0
+Function_manhattanDistance:5515
+Function_hammingDistance:0
+Function_compareTo:1252605
+Function_addStepToList:70464
+Function_getListOfSteps:107134
+Function_getPriority:0
+Function_getMovesDoneSoFar:70464
+Function_getPreviousState:106983
+Function_getCurrentState:36529
+Constructor_puzzleNode:70469
+Puzzle Profiler ==========================
+Function_followMovements:0
+Function_isSolved:36529
+Function_invariant:0
+Function_clone:106983
+Function_equals:143512
+Function_transpose:266
+Function_inversions:532
+Function_isSolvable:5
+Function_toString:5
+Function_validMoves:143507
+Function_movePiece:106983
+Function_shuffle:0
+Function_toArray:0
+Function_getDimension:5515
+Function_getSize:70469
+Constructor_puzzle:143512
+
+
+Initial puzzle in aStar with walkingDistancePrime of 0.39880952380952384
++-------+-------+-------+-------+
+|  1	|  7	|  10	|  8	|
++-------+-------+-------+-------+
+|    	|  3	|  11	|  2	|
++-------+-------+-------+-------+
+|  5	|  13	|  12	|  15	|
++-------+-------+-------+-------+
+|  6	|  9	|  14	|  4	|
++-------+-------+-------+-------+
+
+Solution in 33 steps:
+[5, 6, 9, 13, 6, 9, 13, 14, 12, 15, 4, 12, 15, 11, 10, 8, 2, 4, 11, 10, 8, 2, 4, 8, 3, 7, 2, 3, 7, 6, 10, 11, 12]
+Time: 36 miliseconds
+Max depth level reached: 33
+Solver Profiler ==========================
+Function_idaStar:0
+Function_aStar:6
+Function_xDistance:64954
+Function_walkingDistancePrime:11486
+Function_geometricSeries:0
+Function_manhattanDistance:16735
+Function_hammingDistance:0
+Function_compareTo:1398286
+Function_addStepToList:81683
+Function_getListOfSteps:123751
+Function_getPriority:0
+Function_getMovesDoneSoFar:81683
+Function_getPreviousState:123563
+Function_getCurrentState:41892
+Constructor_puzzleNode:81689
+Puzzle Profiler ==========================
+Function_followMovements:0
+Function_isSolved:41892
+Function_invariant:0
+Function_clone:123563
+Function_equals:165455
+Function_transpose:11486
+Function_inversions:22972
+Function_isSolvable:6
+Function_toString:6
+Function_validMoves:165449
+Function_movePiece:123563
+Function_shuffle:0
+Function_toArray:0
+Function_getDimension:16735
+Function_getSize:81689
+Constructor_puzzle:165455
+
+
+Initial puzzle in aStar with xDistance of 0.640625
++-------+-------+-------+-------+
+|  1	|  4	|  5	|  8	|
++-------+-------+-------+-------+
+|  13	|  14	|    	|  3	|
++-------+-------+-------+-------+
+|  15	|  12	|  2	|  11	|
++-------+-------+-------+-------+
+|  7	|  6	|  10	|  9	|
++-------+-------+-------+-------+
+
+Solution in 47 steps:
+[2, 12, 14, 2, 5, 4, 2, 5, 3, 11, 12, 14, 6, 7, 15, 13, 5, 6, 14, 10, 7, 14, 10, 7, 9, 12, 11, 8, 4, 3, 7, 9, 14, 10, 9, 14, 10, 15, 13, 9, 14, 10, 15, 14, 10, 11, 12]
+Time: 42433 miliseconds
+Max depth level reached: 49
+Solver Profiler ==========================
+Function_idaStar:0
+Function_aStar:7
+Function_xDistance:6381160
+Function_walkingDistancePrime:11486
+Function_geometricSeries:0
+Function_manhattanDistance:16735
+Function_hammingDistance:0
+Function_compareTo:174325167
+Function_addStepToList:6397888
+Function_getListOfSteps:9763218
+Function_getPriority:0
+Function_getMovesDoneSoFar:6397888
+Function_getPreviousState:9762977
+Function_getCurrentState:3365103
+Constructor_puzzleNode:6397895
+Puzzle Profiler ==========================
+Function_followMovements:0
+Function_isSolved:3365103
+Function_invariant:0
+Function_clone:9762977
+Function_equals:13128080
+Function_transpose:11486
+Function_inversions:22972
+Function_isSolvable:7
+Function_toString:7
+Function_validMoves:13128073
+Function_movePiece:9762977
+Function_shuffle:0
+Function_toArray:0
+Function_getDimension:16735
+Function_getSize:6397895
+Constructor_puzzle:13128080
+
+
+Initial puzzle in aStar with manhattanDistance of 0.55
++-------+-------+-------+-------+
+|  1	|  4	|  5	|  8	|
++-------+-------+-------+-------+
+|  13	|  14	|    	|  3	|
++-------+-------+-------+-------+
+|  15	|  12	|  2	|  11	|
++-------+-------+-------+-------+
+|  7	|  6	|  10	|  9	|
++-------+-------+-------+-------+
+
+Solution in 43 steps:
+[2, 12, 14, 2, 5, 4, 2, 5, 3, 11, 12, 10, 6, 7, 15, 14, 10, 6, 9, 12, 11, 8, 4, 3, 6, 9, 7, 15, 14, 13, 5, 10, 9, 7, 15, 14, 13, 9, 10, 6, 7, 11, 12]
+Time: 165 miliseconds
+Max depth level reached: 43
+Solver Profiler ==========================
+Function_idaStar:0
+Function_aStar:8
+Function_xDistance:6381160
+Function_walkingDistancePrime:11486
+Function_geometricSeries:0
+Function_manhattanDistance:150047
+Function_hammingDistance:0
+Function_compareTo:176815737
+Function_addStepToList:6531199
+Function_getListOfSteps:9961330
+Function_getPriority:0
+Function_getMovesDoneSoFar:6531199
+Function_getPreviousState:9961042
+Function_getCurrentState:3429859
+Constructor_puzzleNode:6531207
+Puzzle Profiler ==========================
+Function_followMovements:0
+Function_isSolved:3429859
+Function_invariant:0
+Function_clone:9961042
+Function_equals:13390901
+Function_transpose:11486
+Function_inversions:22972
+Function_isSolvable:8
+Function_toString:8
+Function_validMoves:13390893
+Function_movePiece:9961042
+Function_shuffle:0
+Function_toArray:0
+Function_getDimension:150047
+Function_getSize:6531207
+Constructor_puzzle:13390901
+
+
+Initial puzzle in aStar with walkingDistancePrime of 0.5154761904761904
++-------+-------+-------+-------+
+|  1	|  4	|  5	|  8	|
++-------+-------+-------+-------+
+|  13	|  14	|    	|  3	|
++-------+-------+-------+-------+
+|  15	|  12	|  2	|  11	|
++-------+-------+-------+-------+
+|  7	|  6	|  10	|  9	|
++-------+-------+-------+-------+
+
+Solution in 43 steps:
+[2, 12, 6, 10, 12, 6, 14, 2, 5, 4, 2, 5, 3, 11, 9, 12, 10, 14, 15, 7, 14, 15, 7, 13, 5, 7, 6, 9, 11, 8, 4, 3, 7, 6, 9, 10, 15, 14, 13, 9, 10, 11, 12]
+Time: 3141 miliseconds
+Max depth level reached: 43
+Solver Profiler ==========================
+Function_idaStar:0
+Function_aStar:9
+Function_xDistance:6381160
+Function_walkingDistancePrime:940909
+Function_geometricSeries:0
+Function_manhattanDistance:1079470
+Function_hammingDistance:0
+Function_compareTo:195839050
+Function_addStepToList:7460621
+Function_getListOfSteps:11337842
+Function_getPriority:0
+Function_getMovesDoneSoFar:7460621
+Function_getPreviousState:11337507
+Function_getCurrentState:3876904
+Constructor_puzzleNode:7460630
+Puzzle Profiler ==========================
+Function_followMovements:0
+Function_isSolved:3876904
+Function_invariant:0
+Function_clone:11337507
+Function_equals:15214411
+Function_transpose:940909
+Function_inversions:1881818
+Function_isSolvable:9
+Function_toString:9
+Function_validMoves:15214402
+Function_movePiece:11337507
+Function_shuffle:0
+Function_toArray:0
+Function_getDimension:1079470
+Function_getSize:7460630
+Constructor_puzzle:15214411
+************ FINISH Test aStar() ************
+
+
+************ START  Test idaStar() ************
+
+
+Initial puzzle in idaStar with xDistance of 0.359375
++-------+-------+-------+-------+
+|  1	|  6	|  2	|  4	|
++-------+-------+-------+-------+
+|    	|  10	|  7	|  8	|
++-------+-------+-------+-------+
+|  3	|  5	|  15	|  11	|
++-------+-------+-------+-------+
+|  9	|  13	|  14	|  12	|
++-------+-------+-------+-------+
+
+Solution in 17 steps:
+[3, 5, 10, 3, 5, 9, 13, 14, 15, 7, 3, 6, 2, 3, 7, 11, 12]
+Time: 13 miliseconds
+Max depth level reached: 17
+Solver Profiler ==========================
+Function_idaStar:1
+Function_aStar:9
+Function_xDistance:6390131
+Function_walkingDistancePrime:940909
+Function_geometricSeries:0
+Function_manhattanDistance:1079470
+Function_hammingDistance:0
+Function_compareTo:195839050
+Function_addStepToList:7460638
+Function_getListOfSteps:11337897
+Function_getPriority:13322
+Function_getMovesDoneSoFar:7469591
+Function_getPreviousState:11351093
+Function_getCurrentState:3885881
+Constructor_puzzleNode:7469601
+Puzzle Profiler ==========================
+Function_followMovements:0
+Function_isSolved:3881536
+Function_invariant:0
+Function_clone:11351093
+Function_equals:15232629
+Function_transpose:940909
+Function_inversions:1881818
+Function_isSolvable:10
+Function_toString:10
+Function_validMoves:15232619
+Function_movePiece:11351093
+Function_shuffle:0
+Function_toArray:0
+Function_getDimension:1079470
+Function_getSize:7469601
+Constructor_puzzle:15232629
+
+
+Initial puzzle in idaStar with manhattanDistance of 0.25
++-------+-------+-------+-------+
+|  1	|  6	|  2	|  4	|
++-------+-------+-------+-------+
+|    	|  10	|  7	|  8	|
++-------+-------+-------+-------+
+|  3	|  5	|  15	|  11	|
++-------+-------+-------+-------+
+|  9	|  13	|  14	|  12	|
++-------+-------+-------+-------+
+
+Solution in 17 steps:
+[3, 5, 10, 3, 5, 9, 13, 14, 15, 7, 3, 6, 2, 3, 7, 11, 12]
+Time: 0 miliseconds
+Max depth level reached: 17
+Solver Profiler ==========================
+Function_idaStar:2
+Function_aStar:9
+Function_xDistance:6390131
+Function_walkingDistancePrime:940909
+Function_geometricSeries:0
+Function_manhattanDistance:1079509
+Function_hammingDistance:0
+Function_compareTo:195839050
+Function_addStepToList:7460655
+Function_getListOfSteps:11337952
+Function_getPriority:13378
+Function_getMovesDoneSoFar:7469629
+Function_getPreviousState:11351143
+Function_getCurrentState:3885920
+Constructor_puzzleNode:7469640
+Puzzle Profiler ==========================
+Function_followMovements:0
+Function_isSolved:3881558
+Function_invariant:0
+Function_clone:11351143
+Function_equals:15232701
+Function_transpose:940909
+Function_inversions:1881818
+Function_isSolvable:11
+Function_toString:11
+Function_validMoves:15232690
+Function_movePiece:11351143
+Function_shuffle:0
+Function_toArray:0
+Function_getDimension:1079509
+Function_getSize:7469640
+Constructor_puzzle:15232701
+
+
+Initial puzzle in idaStar with walkingDistancePrime of 0.25595238095238093
++-------+-------+-------+-------+
+|  1	|  6	|  2	|  4	|
++-------+-------+-------+-------+
+|    	|  10	|  7	|  8	|
++-------+-------+-------+-------+
+|  3	|  5	|  15	|  11	|
++-------+-------+-------+-------+
+|  9	|  13	|  14	|  12	|
++-------+-------+-------+-------+
+
+Solution in 17 steps:
+[3, 5, 10, 3, 5, 9, 13, 14, 15, 7, 3, 6, 2, 3, 7, 11, 12]
+Time: 13 miliseconds
+Max depth level reached: 17
+Solver Profiler ==========================
+Function_idaStar:3
+Function_aStar:9
+Function_xDistance:6390131
+Function_walkingDistancePrime:946904
+Function_geometricSeries:0
+Function_manhattanDistance:1085504
+Function_hammingDistance:0
+Function_compareTo:195839050
+Function_addStepToList:7460672
+Function_getListOfSteps:11338007
+Function_getPriority:22587
+Function_getMovesDoneSoFar:7475623
+Function_getPreviousState:11359958
+Function_getCurrentState:3891965
+Constructor_puzzleNode:7475635
+Puzzle Profiler ==========================
+Function_followMovements:0
+Function_isSolved:3884439
+Function_invariant:0
+Function_clone:11359958
+Function_equals:15244397
+Function_transpose:946904
+Function_inversions:1893808
+Function_isSolvable:12
+Function_toString:12
+Function_validMoves:15244385
+Function_movePiece:11359958
+Function_shuffle:0
+Function_toArray:0
+Function_getDimension:1085504
+Function_getSize:7475635
+Constructor_puzzle:15244397
+
+
+Initial puzzle in idaStar with xDistance of 0.59375
++-------+-------+-------+-------+
+|  1	|  7	|  10	|  8	|
++-------+-------+-------+-------+
+|    	|  3	|  11	|  2	|
++-------+-------+-------+-------+
+|  5	|  13	|  12	|  15	|
++-------+-------+-------+-------+
+|  6	|  9	|  14	|  4	|
++-------+-------+-------+-------+
+
+Solution in 35 steps:
+[5, 13, 9, 6, 13, 9, 6, 14, 12, 15, 4, 12, 15, 11, 10, 8, 2, 4, 12, 15, 11, 10, 8, 2, 4, 8, 3, 7, 2, 3, 7, 6, 10, 11, 15]
+Time: 14 miliseconds
+Max depth level reached: 35
+Solver Profiler ==========================
+Function_idaStar:4
+Function_aStar:9
+Function_xDistance:6403665
+Function_walkingDistancePrime:946904
+Function_geometricSeries:0
+Function_manhattanDistance:1085504
+Function_hammingDistance:0
+Function_compareTo:195839050
+Function_addStepToList:7460707
+Function_getListOfSteps:11338116
+Function_getPriority:42577
+Function_getMovesDoneSoFar:7489156
+Function_getPreviousState:11380546
+Function_getCurrentState:3905499
+Constructor_puzzleNode:7489169
+Puzzle Profiler ==========================
+Function_followMovements:0
+Function_isSolved:3891517
+Function_invariant:0
+Function_clone:11380546
+Function_equals:15272063
+Function_transpose:946904
+Function_inversions:1893808
+Function_isSolvable:13
+Function_toString:13
+Function_validMoves:15272050
+Function_movePiece:11380546
+Function_shuffle:0
+Function_toArray:0
+Function_getDimension:1085504
+Function_getSize:7489169
+Constructor_puzzle:15272063
+
+
+Initial puzzle in idaStar with manhattanDistance of 0.45
++-------+-------+-------+-------+
+|  1	|  7	|  10	|  8	|
++-------+-------+-------+-------+
+|    	|  3	|  11	|  2	|
++-------+-------+-------+-------+
+|  5	|  13	|  12	|  15	|
++-------+-------+-------+-------+
+|  6	|  9	|  14	|  4	|
++-------+-------+-------+-------+
+
+Solution in 33 steps:
+[5, 13, 9, 6, 13, 9, 6, 14, 12, 15, 4, 12, 15, 11, 10, 8, 2, 4, 11, 10, 8, 2, 4, 8, 3, 7, 2, 3, 7, 6, 10, 11, 12]
+Time: 43 miliseconds
+Max depth level reached: 33
+Solver Profiler ==========================
+Function_idaStar:5
+Function_aStar:9
+Function_xDistance:6403665
+Function_walkingDistancePrime:946904
+Function_geometricSeries:0
+Function_manhattanDistance:1128212
+Function_hammingDistance:0
+Function_compareTo:195839050
+Function_addStepToList:7460740
+Function_getListOfSteps:11338219
+Function_getPriority:107679
+Function_getMovesDoneSoFar:7531863
+Function_getPreviousState:11443557
+Function_getCurrentState:3948220
+Constructor_puzzleNode:7531877
+Puzzle Profiler ==========================
+Function_followMovements:0
+Function_isSolved:3911857
+Function_invariant:0
+Function_clone:11443557
+Function_equals:15355414
+Function_transpose:946904
+Function_inversions:1893808
+Function_isSolvable:14
+Function_toString:14
+Function_validMoves:15355400
+Function_movePiece:11443557
+Function_shuffle:0
+Function_toArray:0
+Function_getDimension:1128212
+Function_getSize:7531877
+Constructor_puzzle:15355414
+
+
+Initial puzzle in idaStar with walkingDistancePrime of 0.39880952380952384
++-------+-------+-------+-------+
+|  1	|  7	|  10	|  8	|
++-------+-------+-------+-------+
+|    	|  3	|  11	|  2	|
++-------+-------+-------+-------+
+|  5	|  13	|  12	|  15	|
++-------+-------+-------+-------+
+|  6	|  9	|  14	|  4	|
++-------+-------+-------+-------+
+
+Solution in 33 steps:
+[5, 13, 9, 6, 13, 9, 6, 14, 12, 15, 4, 12, 15, 11, 10, 8, 2, 4, 11, 10, 8, 2, 4, 8, 3, 7, 2, 3, 7, 6, 10, 11, 12]
+Time: 1780 miliseconds
+Max depth level reached: 33
+Solver Profiler ==========================
+Function_idaStar:6
+Function_aStar:9
+Function_xDistance:6403665
+Function_walkingDistancePrime:1705545
+Function_geometricSeries:0
+Function_manhattanDistance:1886853
+Function_hammingDistance:0
+Function_compareTo:195839050
+Function_addStepToList:7460773
+Function_getListOfSteps:11338322
+Function_getPriority:1264345
+Function_getMovesDoneSoFar:8290503
+Function_getPreviousState:12563035
+Function_getCurrentState:4707106
+Constructor_puzzleNode:8290518
+Puzzle Profiler ==========================
+Function_followMovements:0
+Function_isSolved:4272963
+Function_invariant:0
+Function_clone:12563035
+Function_equals:16835998
+Function_transpose:1705545
+Function_inversions:3411090
+Function_isSolvable:15
+Function_toString:15
+Function_validMoves:16835983
+Function_movePiece:12563035
+Function_shuffle:0
+Function_toArray:0
+Function_getDimension:1886853
+Function_getSize:8290518
+Constructor_puzzle:16835998
+
+
+Initial puzzle in idaStar with xDistance of 0.640625
++-------+-------+-------+-------+
+|  1	|  4	|  5	|  8	|
++-------+-------+-------+-------+
+|  13	|  14	|    	|  3	|
++-------+-------+-------+-------+
+|  15	|  12	|  2	|  11	|
++-------+-------+-------+-------+
+|  7	|  6	|  10	|  9	|
++-------+-------+-------+-------+
+
+Solution in 49 steps:
+[2, 12, 14, 2, 5, 4, 2, 5, 3, 8, 4, 3, 12, 10, 9, 11, 10, 9, 6, 14, 15, 7, 14, 15, 7, 13, 5, 7, 9, 6, 15, 14, 13, 9, 6, 12, 7, 6, 14, 15, 12, 10, 11, 12, 15, 14, 10, 11, 12]
+Time: 55740 miliseconds
+Max depth level reached: 49
+Solver Profiler ==========================
+Function_idaStar:7
+Function_aStar:9
+Function_xDistance:75798781
+Function_walkingDistancePrime:1705545
+Function_geometricSeries:0
+Function_manhattanDistance:1886853
+Function_hammingDistance:0
+Function_compareTo:195839050
+Function_addStepToList:7460822
+Function_getListOfSteps:11338473
+Function_getPriority:103526651
+Function_getMovesDoneSoFar:77685618
+Function_getPreviousState:118486084
+Function_getCurrentState:74102255
+Constructor_puzzleNode:77685634
+Puzzle Profiler ==========================
+Function_followMovements:0
+Function_isSolved:40800955
+Function_invariant:0
+Function_clone:118486084
+Function_equals:159287039
+Function_transpose:1705545
+Function_inversions:3411090
+Function_isSolvable:16
+Function_toString:16
+Function_validMoves:159287023
+Function_movePiece:118486084
+Function_shuffle:0
+Function_toArray:0
+Function_getDimension:1886853
+Function_getSize:77685634
+Constructor_puzzle:159287039
+
+
+Initial puzzle in idaStar with manhattanDistance of 0.55
++-------+-------+-------+-------+
+|  1	|  4	|  5	|  8	|
++-------+-------+-------+-------+
+|  13	|  14	|    	|  3	|
++-------+-------+-------+-------+
+|  15	|  12	|  2	|  11	|
++-------+-------+-------+-------+
+|  7	|  6	|  10	|  9	|
++-------+-------+-------+-------+
+
+Solution in 43 steps:
+[2, 12, 14, 2, 5, 4, 2, 5, 3, 11, 12, 10, 6, 7, 15, 14, 10, 6, 9, 12, 11, 8, 4, 3, 6, 9, 7, 15, 14, 13, 5, 10, 9, 7, 15, 14, 13, 9, 10, 6, 7, 11, 12]
+Time: 873 miliseconds
+Max depth level reached: 43
+Solver Profiler ==========================
+Function_idaStar:8
+Function_aStar:9
+Function_xDistance:75798781
+Function_walkingDistancePrime:1705545
+Function_geometricSeries:0
+Function_manhattanDistance:2890942
+Function_hammingDistance:0
+Function_compareTo:195839050
+Function_addStepToList:7460865
+Function_getListOfSteps:11338606
+Function_getPriority:105045767
+Function_getMovesDoneSoFar:78689706
+Function_getPreviousState:119979241
+Function_getCurrentState:75106376
+Constructor_puzzleNode:78689723
+Puzzle Profiler ==========================
+Function_followMovements:0
+Function_isSolved:41290081
+Function_invariant:0
+Function_clone:119979241
+Function_equals:161269322
+Function_transpose:1705545
+Function_inversions:3411090
+Function_isSolvable:17
+Function_toString:17
+Function_validMoves:161269305
+Function_movePiece:119979241
+Function_shuffle:0
+Function_toArray:0
+Function_getDimension:2890942
+Function_getSize:78689723
+Constructor_puzzle:161269322
+
+
+Initial puzzle in idaStar with walkingDistancePrime of 0.5154761904761904
++-------+-------+-------+-------+
+|  1	|  4	|  5	|  8	|
++-------+-------+-------+-------+
+|  13	|  14	|    	|  3	|
++-------+-------+-------+-------+
+|  15	|  12	|  2	|  11	|
++-------+-------+-------+-------+
+|  7	|  6	|  10	|  9	|
++-------+-------+-------+-------+
+
+Solution in 43 steps:
+[2, 10, 9, 11, 10, 12, 6, 7, 15, 6, 7, 9, 12, 7, 14, 2, 5, 4, 2, 5, 3, 8, 4, 3, 7, 14, 6, 13, 5, 6, 9, 15, 13, 9, 14, 10, 11, 12, 15, 14, 10, 11, 12]
+Time: 126101 miliseconds
+Max depth level reached: 43
+Solver Profiler ==========================
+Function_idaStar:9
+Function_aStar:9
+Function_xDistance:75798781
+Function_walkingDistancePrime:67361793
+Function_geometricSeries:0
+Function_manhattanDistance:68547190
+Function_hammingDistance:0
+Function_compareTo:195839050
+Function_addStepToList:7460908
+Function_getListOfSteps:11338739
+Function_getPriority:204759079
+Function_getMovesDoneSoFar:144345953
+Function_getPreviousState:217235073
+Function_getCurrentState:140763049
+Constructor_puzzleNode:144345971
+Puzzle Profiler ==========================
+Function_followMovements:0
+Function_isSolved:72890115
+Function_invariant:0
+Function_clone:217235073
+Function_equals:290125188
+Function_transpose:67361793
+Function_inversions:134723586
+Function_isSolvable:18
+Function_toString:18
+Function_validMoves:290125170
+Function_movePiece:217235073
+Function_shuffle:0
+Function_toArray:0
+Function_getDimension:68547190
+Function_getSize:144345971
+Constructor_puzzle:290125188
+************ FINISH Test idaStar() ************
