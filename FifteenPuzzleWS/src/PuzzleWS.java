@@ -43,7 +43,14 @@ public class PuzzleWS {
     @Path("/isSolvable")
     @Produces("application/json")
     public boolean isSolvable(@QueryParam("puzzle") String puzzle) {
-        return stringToPuzzle(puzzle).isSolvable();
+        Puzzle p = stringToPuzzle(puzzle);
+        try {
+            if(!p.invariant()) return false;
+            } catch(Exception e){
+            	e.printStackTrace();
+            	return false;
+            }
+    	return p.isSolvable();
     }
     
     /**
@@ -57,9 +64,16 @@ public class PuzzleWS {
     @GET
     @Path("/solve")
     @Produces("application/json")
-    public int[] add(@QueryParam("puzzle") String puzzle) {
-    	List<Integer> list = null;    	
+    public int[] solve(@QueryParam("puzzle") String puzzle) {
+    	List<Integer> list = null;
+    	
         Puzzle npuzzle = stringToPuzzle(puzzle);
+        try {
+        if(!npuzzle.invariant()) return null;
+        } catch(Exception e){
+        	e.printStackTrace();
+        	return null;
+        }
         Solver s;
         try {
         	s = new Solver();
@@ -82,8 +96,8 @@ public class PuzzleWS {
 	         strbul.append(",");
 	        }
 	     }
-	     
-		int[] ret = new int[list.size()];
+	    int[] ret = new int[list.size()];
+		ret = new int[list.size()];
 		for(int i = 0;i < ret.length;i++)
 			ret[i] = list.get(i);
 	    	  
