@@ -278,22 +278,22 @@ public class Solver {
      * @return A number between 0 and 1, representing the estimated cost to 
      *         reach the solved puzzle (normalized).
      */
-    public double xDistance(Puzzle puzzle) {
-   	 int size = puzzle.getSize();
-   	 int rawmetric = 0;
-   	 int zeroOutPlace = 0;
-   	 int [] array = puzzle.toArray(); 
-   	 	for (int i = 0;i<size-1;i++) {
-   	 		if (array[i] == 0 ) {
-   	 			rawmetric += size -i;
-   	 			zeroOutPlace=1;
-   	 		} else {
-   	 			rawmetric += Math.abs(array[i]-(i+1));
-   	 		}
-	    	}
-	    rawmetric += Math.abs(size - array[size-1]-1)*zeroOutPlace;
-	    return rawmetric/MAX_XDISTANCE_15PUZZLE;
-   }
+	public double xDistance(Puzzle puzzle) {
+		int size = puzzle.getSize();
+		int rawmetric = 0;
+		int zeroOutPlace = 0;
+		int [] array = puzzle.toArray(); 
+		for (int i = 0;i<size-1;i++) {
+			if (array[i] == 0 ) {
+				rawmetric += size -i;
+				zeroOutPlace=1;
+			} else {
+				rawmetric += Math.abs(array[i]-(i+1));
+			}
+		}
+		rawmetric += Math.abs(size - array[size-1]-1)*zeroOutPlace;
+		return rawmetric/MAX_XDISTANCE_15PUZZLE;
+	}
     
             
     
