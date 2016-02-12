@@ -342,7 +342,7 @@ public class Solver {
 
             PuzzleNode currentPuzzleNode = pqueue.poll();
             Puzzle currentPuzzle = currentPuzzleNode.getCurrentState();
-            System.out.println("Initial puzzle in aStar with " + 
+            System.out.println("\n\nInitial puzzle in aStar with " + 
                                fitnessFunction.getName() + " of " + 
                                result + "\n" + currentPuzzle.toString());
 
@@ -397,7 +397,7 @@ public class Solver {
                                 currentPuzzleNode.getListOfSteps().size() 
                                + " steps:\n" + 
                                 currentPuzzleNode.getListOfSteps());
-            System.out.println("Time: " + (end-start)/1000 + " seconds");
+            System.out.println("Time: " + (end-start) + " miliseconds");
             System.out.println("Max depth level reached: " + depthLevel);
             depthLevel = 0;
         
@@ -451,7 +451,7 @@ public class Solver {
             
             PuzzleNode root = new PuzzleNode(puzzle, null, threshold, 0.0);
             
-            System.out.println("Initial puzzle in idaStar with " 
+            System.out.println("\n\nInitial puzzle in idaStar with " 
                             + fitnessFunction.getName() + " of " 
                             + threshold + "\n" + puzzle.toString());
 
@@ -467,7 +467,7 @@ public class Solver {
             Collections.reverse(root.getListOfSteps());
             System.out.println("Solution in " + root.getListOfSteps().size() + 
                                " steps:\n" + root.getListOfSteps());
-            System.out.println("Time: " + (end-start)/1000 + " seconds");
+            System.out.println("Time: " + (end-start) + " miliseconds");
             System.out.println("Max depth level reached: " + depthLevel);
             depthLevel = 0;
 
